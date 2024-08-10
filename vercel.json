@@ -9,5 +9,5 @@
   "memory": 512,
   "disk": 1024,
   "buildCommand": "npm run build",
-  "startCommand": "node server/server.js"
+  "startCommand": "npm start"
 }
