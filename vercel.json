@@ -5,6 +5,5 @@
   "env": {
     "env_type": "production"
   },
-  "buildCommand": "npm run build",
-  "startCommand": "npm start"
+  "buildCommand": "npm run build"
 }
