@@ -6,7 +6,6 @@
   "env": {
     "env_type": "production"
   },
-  "memory": 512,
   "disk": 1024,
   "buildCommand": "npm run build",
   "startCommand": "npm start"
