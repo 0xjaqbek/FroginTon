@@ -13,7 +13,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-
     <div id="gameAreaWrapper">
         <div id="status"><span class="title">Leaderboard</span></div>
         <div class="chatbox" id="chatbox">
@@ -60,31 +59,31 @@
         </div>
     </div>
     <!-- JS -->
-
-    
-    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script>
         window.onload = function () {
             var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
-    
+
             if (isTelegramWebApp) {
                 console.log("Aplikacja działa w Telegram Web App");
-    
+
                 Telegram.WebApp.ready().then(() => {
-                    // Pobranie danych użytkownika
+                    // Log entire initDataUnsafe to inspect
+                    console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
+
                     var user = Telegram.WebApp.initDataUnsafe.user;
-    
-                    // Sprawdzenie, czy dane użytkownika są dostępne
+
                     if (user) {
+                        var firstName = user.first_name || "Brak imienia";
                         var username = user.username || "";
-    
-                        // Logowanie danych użytkownika
+
+                        console.log("Imię użytkownika: " + firstName);
                         console.log("Nazwa użytkownika: " + username);
-    
-                        // Wstawienie nazwy użytkownika do pola tekstowego
+
                         var playerNameInput = document.getElementById('playerNameInput');
                         if (playerNameInput) {
-                            playerNameInput.value = username ? username : firstName;
+                            playerNameInput.value = username || firstName;
+                        } else {
+                            console.log("Nie znaleziono elementu input.");
                         }
                     } else {
                         console.log("Brak danych użytkownika.");
@@ -97,6 +96,7 @@
             }
         }
     </script>
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
