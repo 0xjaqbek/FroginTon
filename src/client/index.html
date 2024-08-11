@@ -26,40 +26,6 @@
         </div>
         <canvas tabindex="1" id="cvs"></canvas>
     </div>
-    <script>
-        window.onload = function () {
-            var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
-
-            if (isTelegramWebApp) {
-                console.log("Aplikacja działa w Telegram Web App");
-
-                Telegram.WebApp.ready();
-
-                // Pobranie danych użytkownika
-                var user = Telegram.WebApp.initDataUnsafe.user;
-
-                // Sprawdzenie, czy dane użytkownika są dostępne
-                if (user) {
-                    var firstName = user.first_name || "Brak imienia";
-                    var username = user.username || "";
-
-                    // Logowanie danych użytkownika
-                    console.log("Imię użytkownika: " + firstName);
-                    console.log("Nazwa użytkownika: " + username);
-
-                    // Wstawienie nazwy użytkownika do pola tekstowego
-                    var playerNameInput = document.getElementById('playerNameInput');
-                    if (playerNameInput) {
-                        playerNameInput.value = username ? username : firstName;
-                    }
-                } else {
-                    console.log("Brak danych użytkownika.");
-                }
-            } else {
-                console.log("Aplikacja nie działa w Telegram Web App");
-            }
-        }
-    </script>
     <div id="startMenuWrapper">
         <div id="startMenu">
             <p>Frogin</p>
@@ -94,6 +60,40 @@
         </div>
     </div>
     <!-- JS -->
+    <script>
+        window.onload = function () {
+            var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+
+            if (isTelegramWebApp) {
+                console.log("Aplikacja działa w Telegram Web App");
+
+                Telegram.WebApp.ready();
+
+                // Pobranie danych użytkownika
+                var user = Telegram.WebApp.initDataUnsafe.user;
+
+                // Sprawdzenie, czy dane użytkownika są dostępne
+                if (user) {
+                    var firstName = user.first_name || "Brak imienia";
+                    var username = user.username || "";
+
+                    // Logowanie danych użytkownika
+                    console.log("Imię użytkownika: " + firstName);
+                    console.log("Nazwa użytkownika: " + username);
+
+                    // Wstawienie nazwy użytkownika do pola tekstowego
+                    var playerNameInput = document.getElementById('playerNameInput');
+                    if (playerNameInput) {
+                        playerNameInput.value = username ? username : firstName;
+                    }
+                } else {
+                    console.log("Brak danych użytkownika.");
+                }
+            } else {
+                console.log("Aplikacja nie działa w Telegram Web App");
+            }
+        }
+    </script>
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
 </body>
