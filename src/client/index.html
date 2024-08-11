@@ -45,22 +45,8 @@
             } else {
                 console.log("Aplikacja nie działa w Telegram Web App");
             }
-            
-            // Obsługa kliknięcia przycisku Play
-            var startButton = document.getElementById('startButton');
-            if (startButton) {
-                startButton.addEventListener('click', function (event) {
-                    event.preventDefault(); // Zapobiega domyślnemu działaniu linka
-                    var startMenuWrapper = document.getElementById('startMenuWrapper');
-                    if (startMenuWrapper) {
-                        startMenuWrapper.style.display = 'none'; // Ukrywa panel startowy
-                    }
-                    document.getElementById('spawn_cell').play(); // Odtwarza dźwięk
-                });
-            }
         }
     </script>
-
     <div id="gameAreaWrapper">
         <div id="status"><span class="title">Leaderboard</span></div>
         <div class="chatbox" id="chatbox">
@@ -79,7 +65,7 @@
             <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
-            <a id="startButton" href="#"><button>Play</button></a>
+            <a onclick="document.getElementById('spawn_cell').play();"><button id="startButton">Play</button></a>
             <button id="spectateButton">Spectate</button>
             <button id="settingsButton">Settings</button>
             <br />
