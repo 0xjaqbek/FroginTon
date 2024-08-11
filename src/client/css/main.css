@@ -14,7 +14,6 @@ html, body, canvas {
     margin: 0;
     padding: 0;
     background: rgba(0, 0, 0, 0.4);
-
 }
 
 div {
@@ -157,7 +156,7 @@ div {
     box-shadow: 0 0 3px 1px #DDDDDD;
 }
 
-#startButton, #spectateButton {
+#startButton, #spectateButton, #settingsButton {
     position: relative;
     margin: auto;
     margin-top: 10px;
@@ -180,39 +179,8 @@ div {
     margin-bottom: 10px;
 }
 
-#spectateButton:active, #spectateButton:hover,
-#startButton:active, #startButton:hover {
-    top: 1px;
-    background: #55D88B;
-    outline: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-#settingsButton {
-    position: relative;
-    margin: auto;
-    margin-top: 10px;
-    width: 100%;
-    height: 40px;
-    box-sizing: border-box;
-    font-size: large;
-    color: white;
-    text-align: center;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    background: #2ecc71;
-    border: 0;
-    border-bottom: 2px solid #28be68;
-    cursor: pointer;
-    -webkit-box-shadow: inset 0 -2px #28be68;
-    box-shadow: inset 0 -2px #28be68;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-#settingsButton:active, #settingsButton:hover {
+#startButton:active, #spectateButton:active, #settingsButton:active,
+#startButton:hover, #spectateButton:hover, #settingsButton:hover {
     top: 1px;
     background: #55D88B;
     outline: none;
@@ -247,7 +215,7 @@ div {
 #startMenu .input-error {
     color: red;
     opacity: 0;
-    font-size : 12px;
+    font-size: 12px;
 }
 
 #startMenuWrapper {
@@ -261,25 +229,60 @@ div {
     opacity: 0;
 }
 
-@media only screen  and (min-width : 1224px) {
-#mobile {
-display: none;
-	}
+@media only screen and (min-width: 1224px) {
+    #mobile {
+        display: none;
+    }
 }
 
-@media only screen  and (max-width : 1224px) {
-#chatbox {
-display: none;
-        }
+@media only screen and (max-width: 1224px) {
+    #chatbox {
+        display: none;
+    }
 }
 
-input [type="image"]:focus{
- border:none;
- outline: 1px solid transparent;
- border-style: none;
+@media only screen and (max-width: 768px) {
+    * {
+        font-size: 12px; /* Smaller font size for small screens */
+    }
+
+    #startMenu {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    #playerNameInput {
+        font-size: 12px; /* Smaller input font size */
+    }
+
+    #startButton, #spectateButton, #settingsButton {
+        width: 90%; /* Adjust button width for smaller screens */
+        height: 35px; /* Adjust button height */
+    }
+
+    #status {
+        font-size: 14px; /* Smaller font size for status */
+        top: 5px; /* Adjust position */
+        right: 5px; /* Adjust position */
+    }
+
+    .chatbox {
+        width: 90%; /* Adjust chatbox width */
+        height: auto; /* Allow height to adjust */
+    }
+
+    #split, #feed {
+        display: none; /* Hide split and feed buttons */
+    }
+
+}
+
+input[type="image"]:focus {
+    border: none;
+    outline: 1px solid transparent;
+    border-style: none;
 }
 
 *:focus {
- outline: 1px solid transparent;
- border-style: none;
+    outline: 1px solid transparent;
+    border-style: none;
 }
