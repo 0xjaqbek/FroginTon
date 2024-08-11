@@ -68,15 +68,12 @@
     
                 Telegram.WebApp.ready();
     
-                // Pobranie danych użytkownika
                 var user = Telegram.WebApp.initDataUnsafe.user;
     
-                // Sprawdzenie, czy dane użytkownika są dostępne
                 if (user) {
                     var firstName = user.first_name || "";
-                    var username = user.username ? "@" + user.username : "";
+                    var username = user.username ? "" + user.username : "";
     
-                    // Wstawienie imienia lub nazwy użytkownika jako placeholder
                     var playerNameInput = document.getElementById('playerNameInput');
                     playerNameInput.placeholder = username || "Enter your name here";
                 } else {
