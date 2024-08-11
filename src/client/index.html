@@ -64,15 +64,31 @@
     <script>
         window.onload = function () {
             var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
-
+    
             if (isTelegramWebApp) {
                 console.log("Aplikacja działa w Telegram Web App");
-
+    
                 Telegram.WebApp.ready();
+    
+                // Pobranie danych użytkownika
+                var user = Telegram.WebApp.initDataUnsafe.user;
+    
+                // Sprawdzenie, czy dane użytkownika są dostępne
+                if (user) {
+                    var firstName = user.first_name || "Brak imienia";
+                    var username = user.username ? "@" + user.username : "Brak nazwy użytkownika";
+    
+                    // Logowanie danych użytkownika
+                    console.log("Imię użytkownika: " + firstName);
+                    console.log("Nazwa użytkownika: " + username);
+                } else {
+                    console.log("Brak danych użytkownika.");
+                }
             } else {
                 console.log("Aplikacja nie działa w Telegram Web App");
             }
         }
     </script>
+    
 </body>
 </html>
