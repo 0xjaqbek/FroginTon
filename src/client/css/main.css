@@ -246,16 +246,11 @@ div {
         font-size: 12px; /* Smaller font size for small screens */
     }
 
-    #startMenu {
-        width: 90%; /* Adjust width for smaller screens */
-    }
-
     #playerNameInput {
         font-size: 12px; /* Smaller input font size */
     }
 
     #startButton, #spectateButton, #settingsButton {
-        width: 90%; /* Adjust button width for smaller screens */
         height: 35px; /* Adjust button height */
     }
 
