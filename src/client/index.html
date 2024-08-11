@@ -32,8 +32,7 @@
             <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
-            <!-- Change to button and add event listener in JS -->
-            <button id="startButton">Play</button>
+            <a onclick="document.getElementById('spawn_cell').play();"><button id="startButton">Play</button></a>
             <button id="spectateButton">Spectate</button>
             <button id="settingsButton">Settings</button>
             <br />
@@ -61,8 +60,6 @@
         </div>
     </div>
     <!-- JS -->
-
-    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script>
         window.onload = function () {
             var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
@@ -96,23 +93,9 @@
             } else {
                 console.log("Aplikacja nie działa w Telegram Web App");
             }
-
-            // Add click event listener to the start button
-            document.getElementById('startButton').addEventListener('click', function() {
-                // Play the audio
-                document.getElementById('spawn_cell').play();
-
-                // Hide the start menu
-                var startMenuWrapper = document.getElementById('startMenuWrapper');
-                if (startMenuWrapper) {
-                    startMenuWrapper.style.display = 'none';
-                } else {
-                    console.log("Nie znaleziono elementu startMenuWrapper.");
-                }
-            });
         }
     </script>
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
-    
 </body>
 </html>
