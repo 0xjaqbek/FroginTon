@@ -13,6 +13,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+
     <div id="gameAreaWrapper">
         <div id="status"><span class="title">Leaderboard</span></div>
         <div class="chatbox" id="chatbox">
@@ -31,7 +32,8 @@
             <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
-            <a onclick="document.getElementById('spawn_cell').play();"><button id="startButton">Play</button></a>
+            <!-- Change to button and add event listener in JS -->
+            <button id="startButton">Play</button>
             <button id="spectateButton">Spectate</button>
             <button id="settingsButton">Settings</button>
             <br />
@@ -62,55 +64,10 @@
     <script>
         window.onload = function () {
             var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
-    
-            if (isTelegramWebApp) {
-                console.log("Aplikacja działa w Telegram Web App");
-    
-                Telegram.WebApp.ready().then(() => {
-                    // Log entire initDataUnsafe to inspect
-                    console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
-    
-                    var user = Telegram.WebApp.initDataUnsafe.user;
-    
-                    if (user) {
-                        var firstName = user.first_name || "Brak imienia";
-                        var username = user.username || "";
-    
-                        console.log("Imię użytkownika: " + firstName);
-                        console.log("Nazwa użytkownika: " + username);
-    
-                        var playerNameInput = document.getElementById('playerNameInput');
-                        if (playerNameInput) {
-                            playerNameInput.value = username || firstName;
-    
-                            // Delay autofocus to avoid issues with cross-origin iframes
-                            setTimeout(() => {
-                                playerNameInput.focus();
-                            }, 100);
-                        } else {
-                            console.log("Nie znaleziono elementu input.");
-                        }
-                    } else {
-                        console.log("Brak danych użytkownika.");
-                    }
-                }).catch(error => {
-                    console.log("Błąd podczas ładowania Telegram Web App:", error);
-                });
-            } else {
-                console.log("Aplikacja nie działa w Telegram Web App");
-            }
-        }
-    </script>
-    
-
-    <script>
-        window.onload = function () {
-            var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
 
             if (isTelegramWebApp) {
                 console.log("Aplikacja działa w Telegram Web App");
 
-                // Ensure Telegram WebApp is ready
                 Telegram.WebApp.ready();
 
                 // Retrieve user information
@@ -124,10 +81,10 @@
                     console.log("Imię użytkownika: " + firstName);
                     console.log("Nazwa użytkownika: " + username);
 
-                    // Set the value of the input field
+                    // Set the placeholder of the input field
                     var playerNameInput = document.getElementById('playerNameInput');
                     if (playerNameInput) {
-                        playerNameInput.value = username || firstName;
+                        playerNameInput.placeholder = username || firstName || "Enter your name here";
                     } else {
                         console.log("Nie znaleziono elementu input.");
                     }
@@ -137,9 +94,23 @@
             } else {
                 console.log("Aplikacja nie działa w Telegram Web App");
             }
+
+            // Add click event listener to the start button
+            document.getElementById('startButton').addEventListener('click', function() {
+                // Play the audio
+                document.getElementById('spawn_cell').play();
+
+                // Hide the start menu
+                var startMenuWrapper = document.getElementById('startMenuWrapper');
+                if (startMenuWrapper) {
+                    startMenuWrapper.style.display = 'none';
+                } else {
+                    console.log("Nie znaleziono elementu startMenuWrapper.");
+                }
+            });
         }
     </script>
-        <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
-        <script src="js/app.js"></script>    
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
