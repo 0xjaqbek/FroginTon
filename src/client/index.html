@@ -60,6 +60,9 @@
         </div>
     </div>
     <!-- JS -->
+
+    
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script>
         window.onload = function () {
             var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
@@ -73,11 +76,9 @@
     
                     // Sprawdzenie, czy dane użytkownika są dostępne
                     if (user) {
-                        var firstName = user.first_name || "Brak imienia";
                         var username = user.username || "";
     
                         // Logowanie danych użytkownika
-                        console.log("Imię użytkownika: " + firstName);
                         console.log("Nazwa użytkownika: " + username);
     
                         // Wstawienie nazwy użytkownika do pola tekstowego
@@ -96,8 +97,6 @@
             }
         }
     </script>
-    
-    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
