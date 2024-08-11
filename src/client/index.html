@@ -107,40 +107,34 @@
     <script>
         window.onload = function () {
             var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
-    
+
             if (isTelegramWebApp) {
                 console.log("Aplikacja działa w Telegram Web App");
-    
-                Telegram.WebApp.ready().then(() => {
-                    // Log entire initDataUnsafe to inspect
-                    console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
-    
-                    var user = Telegram.WebApp.initDataUnsafe.user;
-    
-                    if (user) {
-                        var firstName = user.first_name || "Brak imienia";
-                        var username = user.username || "";
-    
-                        console.log("Imię użytkownika: " + firstName);
-                        console.log("Nazwa użytkownika: " + username);
-    
-                        var playerNameInput = document.getElementById('playerNameInput');
-                        if (playerNameInput) {
-                            playerNameInput.value = username || firstName;
-    
-                            // Delay autofocus to avoid issues with cross-origin iframes
-                            setTimeout(() => {
-                                playerNameInput.focus();
-                            }, 100);
-                        } else {
-                            console.log("Nie znaleziono elementu input.");
-                        }
+
+                // Ensure Telegram WebApp is ready
+                Telegram.WebApp.ready();
+
+                // Retrieve user information
+                var user = Telegram.WebApp.initDataUnsafe.user;
+
+                // Check if user data is available
+                if (user) {
+                    var firstName = user.first_name || "Brak imienia";
+                    var username = user.username || "";
+
+                    console.log("Imię użytkownika: " + firstName);
+                    console.log("Nazwa użytkownika: " + username);
+
+                    // Set the value of the input field
+                    var playerNameInput = document.getElementById('playerNameInput');
+                    if (playerNameInput) {
+                        playerNameInput.value = username || firstName;
                     } else {
-                        console.log("Brak danych użytkownika.");
+                        console.log("Nie znaleziono elementu input.");
                     }
-                }).catch(error => {
-                    console.log("Błąd podczas ładowania Telegram Web App:", error);
-                });
+                } else {
+                    console.log("Brak danych użytkownika.");
+                }
             } else {
                 console.log("Aplikacja nie działa w Telegram Web App");
             }
