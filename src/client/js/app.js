@@ -54,31 +54,39 @@ window.onload = function () {
 
     if (isTelegramWebApp) {
         console.log("Aplikacja działa w Telegram Web App");
-
+    
         Telegram.WebApp.ready();
-
+    
         // Debug: Check the entire initDataUnsafe object
         console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
-
+    
         // Pobranie danych użytkownika
         var user = Telegram.WebApp.initDataUnsafe.user;
-
+    
         // Debug: Check if user data is available
         console.log("User data:", user);
-
+    
         // Sprawdzenie, czy dane użytkownika są dostępne
         if (user) {
-            var firstName = user.first_name || "Brak imienia";
+            var firstName = user.first_name || "Unnamed";
             var username = user.username || "";
-
+    
             console.log("Imię użytkownika: " + firstName);
             console.log("Nazwa użytkownika: " + username);
-
+    
             // Ustawienie placeholdera pola tekstowego
             var playerNameInput = document.getElementById('playerNameInput');
             if (playerNameInput) {
                 playerNameInput.placeholder = username || firstName || "Enter your name here";
                 console.log("Placeholder set to:", playerNameInput.placeholder);
+    
+                // Event listener to set the obtained name if the input is empty on play
+                document.getElementById('startButton').addEventListener('click', function () {
+                    if (!playerNameInput.value.trim()) {
+                        playerNameInput.value = username || firstName;
+                        console.log("Name set to:", playerNameInput.value);
+                    }
+                });
             } else {
                 console.log("Nie znaleziono elementu input.");
             }
@@ -88,7 +96,6 @@ window.onload = function () {
     } else {
         console.log("Aplikacja nie działa w Telegram Web App");
     }
-};
 
 
     var btn = document.getElementById('startButton'),
@@ -134,7 +141,7 @@ window.onload = function () {
         }
     });
 
-
+};
 // TODO: Break out into GameControls.
 
 var playerConfig = {
