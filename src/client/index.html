@@ -27,7 +27,7 @@
     </div>
     <div id="startMenuWrapper">
         <div id="startMenu">
-            <p>Open Agar</p>
+            <p>Fogin</p>
             <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
@@ -75,12 +75,12 @@
     
                 // Sprawdzenie, czy dane użytkownika są dostępne
                 if (user) {
-                    var firstName = user.first_name || "Brak imienia";
-                    var username = user.username ? "@" + user.username : "Brak nazwy użytkownika";
+                    var firstName = user.first_name || "";
+                    var username = user.username ? "@" + user.username : "";
     
-                    // Logowanie danych użytkownika
-                    console.log("Imię użytkownika: " + firstName);
-                    console.log("Nazwa użytkownika: " + username);
+                    // Wstawienie imienia lub nazwy użytkownika jako placeholder
+                    var playerNameInput = document.getElementById('playerNameInput');
+                    playerNameInput.placeholder = firstName || username || "Enter your name here";
                 } else {
                     console.log("Brak danych użytkownika.");
                 }
@@ -89,6 +89,5 @@
             }
         }
     </script>
-    
-</body>
+    </body>
 </html>
