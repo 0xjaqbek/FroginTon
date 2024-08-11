@@ -60,5 +60,16 @@
     <!-- JS -->
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+            var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+
+if (isTelegramWebApp) {
+    console.log("Telegram ON");
+    
+    Telegram.WebApp.ready();
+} else {
+    console.log("NO Telegram Web App");
+}
+    </script>
 </body>
 </html>
