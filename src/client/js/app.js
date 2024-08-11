@@ -47,6 +47,15 @@ function validNick() {
 }
 
 window.onload = function () {
+    var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+
+    if (isTelegramWebApp) {
+        console.log("Telegram ON");
+        
+        Telegram.WebApp.ready();
+    } else {
+        console.log("NO Telegram Web App");
+    }
 
     var btn = document.getElementById('startButton'),
         btnS = document.getElementById('spectateButton'),
