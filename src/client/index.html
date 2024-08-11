@@ -75,12 +75,12 @@
     
                 // Sprawdzenie, czy dane użytkownika są dostępne
                 if (user) {
-                    var firstName = user.first_name || "";
-                    var username = user.username ? "" + user.username : "";
+                    var firstName = user.first_name || "Brak imienia";
+                    var username = user.username ? "@" + user.username : "Brak nazwy użytkownika";
     
-                    // Wstawienie imienia lub nazwy użytkownika jako placeholder
-                    var playerNameInput = document.getElementById('playerNameInput');
-                    playerNameInput.placeholder = username || "Enter your name here";
+                    // Logowanie danych użytkownika
+                    console.log("Imię użytkownika: " + firstName);
+                    console.log("Nazwa użytkownika: " + username);
                 } else {
                     console.log("Brak danych użytkownika.");
                 }
@@ -89,5 +89,6 @@
             }
         }
     </script>
-    </body>
+    
+</body>
 </html>
