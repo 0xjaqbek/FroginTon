@@ -121,7 +121,7 @@ div {
     position: relative;
     margin: auto;
     margin-top: 10px;
-    width: 300px;
+    width: 350px;
     padding: 20px;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -239,6 +239,24 @@ div {
     #chatbox {
         display: none;
     }
+
+    #split, #feed {
+        display: block; /* Ensure split and feed buttons are visible */
+        position: absolute;
+        width: 80px; /* Adjust size as needed */
+        height: 80px; /* Adjust size as needed */
+        padding: 5px;
+    }
+
+    #split {
+        bottom: 10px;
+        left: 10px;
+    }
+
+    #feed {
+        bottom: 10px;
+        right: 10px;
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -246,11 +264,16 @@ div {
         font-size: 12px; /* Smaller font size for small screens */
     }
 
+    #startMenu {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
     #playerNameInput {
         font-size: 12px; /* Smaller input font size */
     }
 
     #startButton, #spectateButton, #settingsButton {
+        width: 90%; /* Adjust button width for smaller screens */
         height: 35px; /* Adjust button height */
     }
 
@@ -266,9 +289,9 @@ div {
     }
 
     #split, #feed {
-        display: none; /* Hide split and feed buttons */
+        width: 70px; /* Adjust size as needed */
+        height: 70px; /* Adjust size as needed */
     }
-
 }
 
 input[type="image"]:focus {
