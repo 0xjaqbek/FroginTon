@@ -29,10 +29,10 @@
     <div id="startMenuWrapper">
         <div id="startMenu">
             <p>Frogin</p>
-            <input type="text" tabindex="0" autofocus placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
+            <input type="text" tabindex="0" placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
-            <a onclick="document.getElementById('spawn_cell').play();"><button id="startButton">Play</button></a>
+            <a onclick="document.getElementById('spawn_cell').play(); document.getElementById('playerNameInput').focus();"><button id="startButton">Play</button></a>
             <button id="spectateButton">Spectate</button>
             <button id="settingsButton">Settings</button>
             <br />
@@ -69,10 +69,10 @@
 
                 Telegram.WebApp.ready();
 
-                // Retrieve user information
+                // Pobranie danych użytkownika
                 var user = Telegram.WebApp.initDataUnsafe.user;
 
-                // Check if user data is available
+                // Sprawdzenie, czy dane użytkownika są dostępne
                 if (user) {
                     var firstName = user.first_name || "Brak imienia";
                     var username = user.username || "";
@@ -80,7 +80,7 @@
                     console.log("Imię użytkownika: " + firstName);
                     console.log("Nazwa użytkownika: " + username);
 
-                    // Set the placeholder of the input field
+                    // Ustawienie placeholdera pola tekstowego
                     var playerNameInput = document.getElementById('playerNameInput');
                     if (playerNameInput) {
                         playerNameInput.placeholder = username || firstName || "Enter your name here";
