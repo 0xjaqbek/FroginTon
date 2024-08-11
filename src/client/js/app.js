@@ -48,6 +48,49 @@ function validNick() {
 
 window.onload = function () {
 
+    console.log("Script loaded and running");
+
+    var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+
+    if (isTelegramWebApp) {
+        console.log("Aplikacja działa w Telegram Web App");
+
+        Telegram.WebApp.ready();
+
+        // Debug: Check the entire initDataUnsafe object
+        console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
+
+        // Pobranie danych użytkownika
+        var user = Telegram.WebApp.initDataUnsafe.user;
+
+        // Debug: Check if user data is available
+        console.log("User data:", user);
+
+        // Sprawdzenie, czy dane użytkownika są dostępne
+        if (user) {
+            var firstName = user.first_name || "Brak imienia";
+            var username = user.username || "";
+
+            console.log("Imię użytkownika: " + firstName);
+            console.log("Nazwa użytkownika: " + username);
+
+            // Ustawienie placeholdera pola tekstowego
+            var playerNameInput = document.getElementById('playerNameInput');
+            if (playerNameInput) {
+                playerNameInput.placeholder = username || firstName || "Enter your name here";
+                console.log("Placeholder set to:", playerNameInput.placeholder);
+            } else {
+                console.log("Nie znaleziono elementu input.");
+            }
+        } else {
+            console.log("Brak danych użytkownika.");
+        }
+    } else {
+        console.log("Aplikacja nie działa w Telegram Web App");
+    }
+};
+
+
     var btn = document.getElementById('startButton'),
         btnS = document.getElementById('spectateButton'),
         nickErrorText = document.querySelector('#startMenu .input-error');
@@ -90,7 +133,7 @@ window.onload = function () {
             }
         }
     });
-};
+
 
 // TODO: Break out into GameControls.
 
