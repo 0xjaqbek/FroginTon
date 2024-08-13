@@ -47,55 +47,52 @@ function validNick() {
 }
 
 window.onload = function () {
-
     console.log("Script loaded and running");
 
-var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+    var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
 
-if (isTelegramWebApp) {
-    console.log("Aplikacja działa w Telegram Web App");
+    if (isTelegramWebApp) {
+        console.log("Running in Telegram Web App");
 
-    Telegram.WebApp.ready();
+        Telegram.WebApp.ready();
 
-    // Debug: Check the entire initDataUnsafe object
-    console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
+        // Debug: Check the entire initDataUnsafe object
+        console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
 
-    // Pobranie danych użytkownika
-    var user = Telegram.WebApp.initDataUnsafe.user;
+        // Get user data
+        var user = Telegram.WebApp.initDataUnsafe.user;
 
-    // Debug: Check if user data is available
-    console.log("User data:", user);
+        // Debug: Check if user data is available
+        console.log("User data:", user);
 
-    // Sprawdzenie, czy dane użytkownika są dostępne
-    if (user) {
-        var firstName = user.first_name || "Unnamed";
-        var username = user.username || "";
+        if (user) {
+            var firstName = user.first_name || "Unnamed";
+            var username = user.username || "";
 
-        console.log("Imię użytkownika: " + firstName);
-        console.log("Nazwa użytkownika: " + username);
+            console.log("User's first name: " + firstName);
+            console.log("Username: " + username);
 
-        // Ustawienie placeholdera pola tekstowego
-        var playerNameInput = document.getElementById('playerNameInput');
-        if (playerNameInput) {
-            playerNameInput.placeholder = username || firstName || "Enter your name here";
-            console.log("Placeholder set to:", playerNameInput.placeholder);
+            // Set the player name and remove the input field
+            global.playerName = username || firstName;
+            console.log("Player name set to: " + global.playerName);
 
-            // Event listener to set the obtained name if the input is empty on play
-            document.getElementById('startButton').addEventListener('click', function () {
-                if (!playerNameInput.value.trim()) {
-                    playerNameInput.value = username || firstName;
-                    console.log("Name set to:", playerNameInput.value);
-                }
-            });
+            // Remove the playerNameInput field from the DOM
+            var playerNameInput = document.getElementById('playerNameInput');
+            if (playerNameInput) {
+                playerNameInput.remove();
+                console.log("playerNameInput field removed.");
+            }
+
+            // Automatically start the game if you want to bypass the start button
+            // startGame("default");  // Uncomment this line if you want the game to start automatically
+
         } else {
-            console.log("Nie znaleziono elementu input.");
+            console.log("No user data available.");
         }
     } else {
-        console.log("Brak danych użytkownika.");
+        console.log("Not running in Telegram Web App");
     }
-} else {
-    console.log("Aplikacja nie działa w Telegram Web App");
-}
+};
 
 
     var btn = document.getElementById('startButton'),
@@ -141,7 +138,7 @@ if (isTelegramWebApp) {
         }
     });
 
-};
+
 // TODO: Break out into GameControls.
 
 var playerConfig = {
