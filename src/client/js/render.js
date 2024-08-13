@@ -58,7 +58,7 @@ const regulatePoint = (point, borders) => ({
 });
 
 const drawCellWithLines = (cell, borders, graph) => {
-    let pointCount = 30 + ~~(cell.mass / 5);
+    let pointCount = 30 + Math.floor(cell.mass / 5);
     let points = [];
     for (let theta = 0; theta < FULL_ANGLE; theta += FULL_ANGLE / pointCount) {
         let point = circlePoint(cell, cell.radius, theta);
@@ -72,19 +72,23 @@ const drawCellWithLines = (cell, borders, graph) => {
     graph.closePath();
     graph.fill();
     graph.stroke();
-}
+};
+
 
 const drawCells = (cells, playerConfig, toggleMassState, borders, graph) => {
     for (let cell of cells) {
-        // Draw the cell itself
+        if (cell.x + cell.radius < borders.left || cell.x - cell.radius > borders.right ||
+            cell.y + cell.radius < borders.top || cell.y - cell.radius > borders.bottom) {
+            continue; // Skip cells that are out of the visible area
+        }
+
         graph.fillStyle = cell.color;
         graph.strokeStyle = cell.borderColor;
         graph.lineWidth = 6;
+
         if (cellTouchingBorders(cell, borders)) {
-            // Asssemble the cell from lines
             drawCellWithLines(cell, borders, graph);
         } else {
-            // Border corrections are not needed, the cell can be drawn as a circle
             drawRoundObject(cell, cell.radius, graph);
         }
 
@@ -110,6 +114,7 @@ const drawCells = (cells, playerConfig, toggleMassState, borders, graph) => {
         }
     }
 };
+
 
 const drawGrid = (global, player, screen, graph) => {
     graph.lineWidth = 1;

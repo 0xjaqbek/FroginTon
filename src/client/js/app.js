@@ -50,52 +50,52 @@ window.onload = function () {
 
     console.log("Script loaded and running");
 
-    var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
 
-    if (isTelegramWebApp) {
-        console.log("Aplikacja działa w Telegram Web App");
-    
-        Telegram.WebApp.ready();
-    
-        // Debug: Check the entire initDataUnsafe object
-        console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
-    
-        // Pobranie danych użytkownika
-        var user = Telegram.WebApp.initDataUnsafe.user;
-    
-        // Debug: Check if user data is available
-        console.log("User data:", user);
-    
-        // Sprawdzenie, czy dane użytkownika są dostępne
-        if (user) {
-            var firstName = user.first_name || "Unnamed";
-            var username = user.username || "";
-    
-            console.log("Imię użytkownika: " + firstName);
-            console.log("Nazwa użytkownika: " + username);
-    
-            // Ustawienie placeholdera pola tekstowego
-            var playerNameInput = document.getElementById('playerNameInput');
-            if (playerNameInput) {
-                playerNameInput.placeholder = username || firstName || "Enter your name here";
-                console.log("Placeholder set to:", playerNameInput.placeholder);
-    
-                // Event listener to set the obtained name if the input is empty on play
-                document.getElementById('startButton').addEventListener('click', function () {
-                    if (!playerNameInput.value.trim()) {
-                        playerNameInput.value = username || firstName;
-                        console.log("Name set to:", playerNameInput.value);
-                    }
-                });
-            } else {
-                console.log("Nie znaleziono elementu input.");
-            }
+if (isTelegramWebApp) {
+    console.log("Aplikacja działa w Telegram Web App");
+
+    Telegram.WebApp.ready();
+
+    // Debug: Check the entire initDataUnsafe object
+    console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
+
+    // Pobranie danych użytkownika
+    var user = Telegram.WebApp.initDataUnsafe.user;
+
+    // Debug: Check if user data is available
+    console.log("User data:", user);
+
+    // Sprawdzenie, czy dane użytkownika są dostępne
+    if (user) {
+        var firstName = user.first_name || "Unnamed";
+        var username = user.username || "";
+
+        console.log("Imię użytkownika: " + firstName);
+        console.log("Nazwa użytkownika: " + username);
+
+        // Ustawienie placeholdera pola tekstowego
+        var playerNameInput = document.getElementById('playerNameInput');
+        if (playerNameInput) {
+            playerNameInput.placeholder = username || firstName || "Enter your name here";
+            console.log("Placeholder set to:", playerNameInput.placeholder);
+
+            // Event listener to set the obtained name if the input is empty on play
+            document.getElementById('startButton').addEventListener('click', function () {
+                if (!playerNameInput.value.trim()) {
+                    playerNameInput.value = username || firstName;
+                    console.log("Name set to:", playerNameInput.value);
+                }
+            });
         } else {
-            console.log("Brak danych użytkownika.");
+            console.log("Nie znaleziono elementu input.");
         }
     } else {
-        console.log("Aplikacja nie działa w Telegram Web App");
+        console.log("Brak danych użytkownika.");
     }
+} else {
+    console.log("Aplikacja nie działa w Telegram Web App");
+}
 
 
     var btn = document.getElementById('startButton'),
@@ -359,71 +359,186 @@ function animloop() {
 
 function gameLoop() {
     if (global.gameStart) {
+        // Clear the entire canvas with the background color
         graph.fillStyle = global.backgroundColor;
         graph.fillRect(0, 0, global.screen.width, global.screen.height);
 
+        // Adjust the visible area dynamically based on the player's cell size
+        adjustViewableArea();
+
+        // Redraw the grid
         render.drawGrid(global, player, global.screen, graph);
+
+        // Recalculate and draw each game entity based on the new screen size and player position
         foods.forEach(food => {
             let position = getPosition(food, player, global.screen);
             render.drawFood(position, food, graph);
         });
+
         fireFood.forEach(fireFood => {
             let position = getPosition(fireFood, player, global.screen);
             render.drawFireFood(position, fireFood, playerConfig, graph);
         });
+
         viruses.forEach(virus => {
             let position = getPosition(virus, player, global.screen);
             render.drawVirus(position, virus, graph);
         });
 
-
-        let borders = { // Position of the borders on the screen
+        let borders = {
             left: global.screen.width / 2 - player.x,
             right: global.screen.width / 2 + global.game.width - player.x,
             top: global.screen.height / 2 - player.y,
             bottom: global.screen.height / 2 + global.game.height - player.y
-        }
+        };
+
         if (global.borderDraw) {
             render.drawBorder(borders, graph);
         }
 
         var cellsToDraw = [];
-        for (var i = 0; i < users.length; i++) {
-            let color = 'hsl(' + users[i].hue + ', 100%, 50%)';
-            let borderColor = 'hsl(' + users[i].hue + ', 100%, 45%)';
-            for (var j = 0; j < users[i].cells.length; j++) {
+        users.forEach(user => {
+            let color = 'hsl(' + user.hue + ', 100%, 50%)';
+            let borderColor = 'hsl(' + user.hue + ', 100%, 45%)';
+
+            user.cells.forEach(cell => {
                 cellsToDraw.push({
                     color: color,
                     borderColor: borderColor,
-                    mass: users[i].cells[j].mass,
-                    name: users[i].name,
-                    radius: users[i].cells[j].radius,
-                    x: users[i].cells[j].x - player.x + global.screen.width / 2,
-                    y: users[i].cells[j].y - player.y + global.screen.height / 2
+                    mass: cell.mass,
+                    name: user.name,
+                    radius: cell.radius,
+                    x: cell.x - player.x + global.screen.width / 2,
+                    y: cell.y - player.y + global.screen.height / 2
                 });
-            }
-        }
-        cellsToDraw.sort(function (obj1, obj2) {
-            return obj1.mass - obj2.mass;
+            });
         });
+
+        cellsToDraw.sort((obj1, obj2) => obj1.mass - obj2.mass);
+
         render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
 
-        socket.emit('0', window.canvas.target); // playerSendTarget "Heartbeat".
+        // Send heartbeat data
+        socket.emit('0', window.canvas.target);
     }
 }
 
-window.addEventListener('resize', resize);
+function adjustViewableArea() {
+    let maxCellSize = Math.max(...player.cells.map(cell => cell.radius * 2));
+
+    if (maxCellSize > global.screen.width * 0.33) {
+        // Log cell size for debugging
+        console.log(`Player's cell is larger than 33% of the screen width: ${maxCellSize}px`);
+
+        // Expand the viewable area to ensure all elements are visible
+        let scalingFactor = 1.2;  // Increase the scaling factor for better visibility
+        global.screen.width *= scalingFactor;
+        global.screen.height *= scalingFactor;
+
+        // Update canvas size
+        c.width = global.screen.width;
+        c.height = global.screen.height;
+
+        // Update player screen size
+        player.screenWidth = global.screen.width;
+        player.screenHeight = global.screen.height;
+
+        // Ensure the player remains centered
+        player.x = Math.max(Math.min(player.x, global.game.width - global.screen.width / 2), global.screen.width / 2);
+        player.y = Math.max(Math.min(player.y, global.game.height - global.screen.height / 2), global.screen.height / 2);
+
+        // Emit the resized window dimensions to the server
+        socket.emit('windowResized', { screenWidth: global.screen.width, screenHeight: global.screen.height });
+    }
+}
 
 function resize() {
     if (!socket) return;
 
-    player.screenWidth = c.width = global.screen.width = global.playerType == 'player' ? window.innerWidth : global.game.width;
-    player.screenHeight = c.height = global.screen.height = global.playerType == 'player' ? window.innerHeight : global.game.height;
-
-    if (global.playerType == 'spectator') {
-        player.x = global.game.width / 2;
-        player.y = global.game.height / 2;
+    // Adjust screen dimensions based on device type
+    if (global.mobile) {
+        global.screen.width = window.innerWidth;
+        global.screen.height = window.innerHeight;
+    } else {
+        global.screen.width = global.playerType == 'player' ? window.innerWidth : global.game.width;
+        global.screen.height = global.playerType == 'player' ? window.innerHeight : global.game.height;
     }
 
+    // Update canvas size if it has changed
+    if (c.width !== global.screen.width || c.height !== global.screen.height) {
+        c.width = global.screen.width;
+        c.height = global.screen.height;
+    }
+
+    // Update player screen size
+    player.screenWidth = global.screen.width;
+    player.screenHeight = global.screen.height;
+
+    // Ensure the player is centered within the new screen dimensions
+    player.x = Math.max(Math.min(player.x, global.game.width - global.screen.width / 2), global.screen.width / 2);
+    player.y = Math.max(Math.min(player.y, global.game.height - global.screen.height / 2), global.screen.height / 2);
+
+    // Trigger redraw after resizing
+    redrawGameElements();
+
+    // Emit the resized window dimensions to the server
     socket.emit('windowResized', { screenWidth: global.screen.width, screenHeight: global.screen.height });
 }
+
+function redrawGameElements() {
+    // Clear the entire canvas with the background color
+    graph.fillStyle = global.backgroundColor;
+    graph.fillRect(0, 0, global.screen.width, global.screen.height);
+
+    // Redraw grid and all game elements
+    render.drawGrid(global, player, global.screen, graph);
+
+    foods.forEach(food => {
+        let position = getPosition(food, player, global.screen);
+        render.drawFood(position, food, graph);
+    });
+
+    fireFood.forEach(fireFood => {
+        let position = getPosition(fireFood, player, global.screen);
+        render.drawFireFood(position, fireFood, playerConfig, graph);
+    });
+
+    viruses.forEach(virus => {
+        let position = getPosition(virus, player, global.screen);
+        render.drawVirus(position, virus, graph);
+    });
+
+    let borders = {
+        left: global.screen.width / 2 - player.x,
+        right: global.screen.width / 2 + global.game.width - player.x,
+        top: global.screen.height / 2 - player.y,
+        bottom: global.screen.height / 2 + global.game.height - player.y
+    };
+
+    if (global.borderDraw) {
+        render.drawBorder(borders, graph);
+    }
+
+    // Redraw player cells sorted by mass
+    let cellsToDraw = [];
+    users.forEach(user => {
+        let color = 'hsl(' + user.hue + ', 100%, 50%)';
+        let borderColor = 'hsl(' + user.hue + ', 100%, 45%)';
+        user.cells.forEach(cell => {
+            cellsToDraw.push({
+                color: color,
+                borderColor: borderColor,
+                mass: cell.mass,
+                name: user.name,
+                radius: cell.radius,
+                x: cell.x - player.x + global.screen.width / 2,
+                y: cell.y - player.y + global.screen.height / 2
+            });
+        });
+    });
+
+    cellsToDraw.sort((obj1, obj2) => obj1.mass - obj2.mass);
+    render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
+}
+
+
