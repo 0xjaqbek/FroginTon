@@ -32,7 +32,7 @@ function startGame(type) {
     }
     if (!global.animLoopHandle)
         animloop();
-    socket.emit('respawn');
+    socket.emit('respawn', { playerName: global.playerName });
     window.chat.socket = socket;
     window.chat.registerFunctions();
     window.canvas.socket = socket;
@@ -217,7 +217,7 @@ function setupSocket(socket) {
     // Handle connection.
     socket.on('welcome', function (playerSettings, gameSizes) {
         player = playerSettings;
-        player.name = global.playerName;
+        player.name = global.playerName || 'Unnamed';  // Fallback to Unnamed if global.playerName is not set
         player.screenWidth = global.screen.width;
         player.screenHeight = global.screen.height;
         player.target = window.canvas.target;
@@ -248,9 +248,9 @@ function setupSocket(socket) {
         window.chat.addSystemLine('{GAME} - <b>' + (isUnnamedCell(data.name) ? 'An unnamed cell' : data.name) + '</b> disconnected.');
     });
 
-    socket.on('playerJoin', (data) => {
-        window.chat.addSystemLine('{GAME} - <b>' + (isUnnamedCell(data.name) ? 'An unnamed cell' : data.name) + '</b> joined.');
-    });
+socket.on('playerJoin', (data) => {
+    window.chat.addSystemLine('{GAME} - <b>' + (data.name || 'An unnamed cell') + '</b> joined.');
+});
 
     socket.on('leaderboard', (data) => {
         leaderboard = data.leaderboard;
