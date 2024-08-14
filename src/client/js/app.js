@@ -6,6 +6,9 @@ var global = require('./global');
 
 var playerNameInput = document.getElementById('playerNameInput');
 var socket;
+// Initialize variables for nipple.js
+var joystick = null;
+var joystickTarget = { x: global.screen.width / 2, y: global.screen.height / 2 };
 
 var debug = function (args) {
     if (console && console.log) {
@@ -30,13 +33,52 @@ function startGame(type) {
         socket = io({ query: "type=" + type });
         setupSocket(socket);
     }
-    if (!global.animLoopHandle)
+    if (!global.animLoopHandle) {
         animloop();
+    }
     socket.emit('respawn', { playerName: global.playerName });
     window.chat.socket = socket;
     window.chat.registerFunctions();
     window.canvas.socket = socket;
     global.socket = socket;
+
+    if (global.mobile) {
+        initializeJoystick();
+    }
+}
+
+function initializeJoystick() {
+    // Create a joystick using nipple.js
+    joystick = nipplejs.create({
+        zone: document.getElementById('gameAreaWrapper'), // Use the game area for the joystick zone
+        mode: 'dynamic',
+        color: 'blue'
+    });
+
+    joystick.on('move', function (evt, data) {
+        if (data && data.direction) {
+            const angle = data.angle.radian;
+            const distance = data.distance;
+
+            // Calculate the new target based on joystick input
+            joystickTarget.x = player.x + Math.cos(angle) * distance;
+            joystickTarget.y = player.y + Math.sin(angle) * distance;
+
+            // Ensure the target doesn't go out of bounds
+            joystickTarget.x = Math.max(0, Math.min(joystickTarget.x, global.game.width));
+            joystickTarget.y = Math.max(0, Math.min(joystickTarget.y, global.game.height));
+
+            // Update the global target for the player
+            global.target.x = joystickTarget.x;
+            global.target.y = joystickTarget.y;
+        }
+    });
+
+    joystick.on('end', function () {
+        // Stop movement when the joystick is released
+        playerMovement.x = 0;
+        playerMovement.y = 0;
+    });
 }
 
 // Checks if the nick chosen contains valid alphanumeric characters (and underscores).
@@ -90,6 +132,11 @@ window.onload = function () {
     } else {
         console.log("Not running in Telegram Web App");
     }
+            // Update player's target position based on joystick input
+            if (global.mobile && joystick) {
+                player.target.x = global.target.x;
+                player.target.y = global.target.y;
+            }
 };
 
 
