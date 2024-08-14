@@ -66,14 +66,12 @@ window.onload = function () {
         console.log("User data:", user);
 
         if (user) {
-            var firstName = user.first_name || "Unnamed";
-            var username = user.username || "";
+            var username = user.username || "Unnamed";
 
-            console.log("User's first name: " + firstName);
             console.log("Username: " + username);
 
-            // Set the player name and remove the input field
-            global.playerName = username || firstName;
+            // Set the player name to the obtained Telegram username
+            global.playerName = username;
             console.log("Player name set to: " + global.playerName);
 
             // Remove the playerNameInput field from the DOM
@@ -83,7 +81,7 @@ window.onload = function () {
                 console.log("playerNameInput field removed.");
             }
 
-            // Automatically start the game if you want to bypass the start button
+            // Optionally, start the game automatically
             // startGame("default");  // Uncomment this line if you want the game to start automatically
 
         } else {
@@ -93,6 +91,7 @@ window.onload = function () {
         console.log("Not running in Telegram Web App");
     }
 };
+
 
 
     var btn = document.getElementById('startButton'),
