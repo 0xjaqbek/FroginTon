@@ -3,7 +3,7 @@ var render = require('./render');
 var ChatClient = require('./chat-client');
 var Canvas = require('./canvas');
 var global = require('./global');
-
+var playerMovement = { x: 0, y: 0 };
 var playerNameInput = document.getElementById('playerNameInput');
 var socket;
 // Initialize variables for nipple.js
@@ -277,7 +277,11 @@ function setupSocket(socket) {
         if (global.mobile) {
             document.getElementById('gameAreaWrapper').removeChild(document.getElementById('chatbox'));
         }
-        c.focus();
+        if (c) {
+            c.focus();
+        } else {
+            console.error("Canvas element 'c' is null. Ensure the canvas is correctly initialized.");
+        }
         global.game.width = gameSizes.width;
         global.game.height = gameSizes.height;
         resize();
@@ -467,9 +471,9 @@ function gameLoop() {
 }
 
 function adjustViewableArea() {
-    let maxCellSize = Math.max(...player.cells.map(cell => cell.radius * 2));
-
-    if (maxCellSize > global.screen.width * 0.33) {
+    if (player.cells && Array.isArray(player.cells)) {
+        let maxCellSize = Math.max(...player.cells.map(cell => cell.radius * 2));
+        if (maxCellSize > global.screen.width * 0.33) {
         // Log cell size for debugging
         console.log(`Player's cell is larger than 33% of the screen width: ${maxCellSize}px`);
 
@@ -528,6 +532,10 @@ function resize() {
     socket.emit('windowResized', { screenWidth: global.screen.width, screenHeight: global.screen.height });
 }
 
+// Attach the resize handler to the window's resize event
+window.addEventListener('resize', resize);
+
+
 function redrawGameElements() {
     // Clear the entire canvas with the background color
     graph.fillStyle = global.backgroundColor;
@@ -584,4 +592,4 @@ function redrawGameElements() {
     render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
 }
 
-
+}
