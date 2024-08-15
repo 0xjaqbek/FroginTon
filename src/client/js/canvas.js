@@ -20,9 +20,8 @@ class Canvas {
             self.directionUp(event);
         }, false);
         this.cv.addEventListener('keydown', this.directionDown, false);
-     //   this.cv.addEventListener('touchstart', this.touchInput, false);
-       // this.cv.addEventListener('touchmove', this.touchInput, false);  
-        this.cv.addEventListener('joystickmove', this.joystickInput.bind(this), false);
+        this.cv.addEventListener('touchstart', this.touchInput, false);
+        this.cv.addEventListener('touchmove', this.touchInput, false);  
         this.cv.parent = self;
         global.canvas = this;
     }
@@ -124,22 +123,14 @@ class Canvas {
     	}
     }
 
-    joystickInput(event) {
-        event.preventDefault();
-        event.stopPropagation();
-    
-        const joystickData = event.detail; // Adjust this based on your joystick library
-        if (!this.directionLock) {
-            // Example mapping for joystick input
-            this.target.x += joystickData.deltaX; // Adjust based on joystick output
-            this.target.y += joystickData.deltaY;
-            
-            // Constrain target position within certain bounds
-            this.target.x = Math.max(0, Math.min(this.target.x, this.cv.width));
-            this.target.y = Math.max(0, Math.min(this.target.y, this.cv.height));
-    
-            global.target = this.target;
-        }
+    touchInput(touch) {
+        touch.preventDefault();
+        touch.stopPropagation();
+    	if (!this.directionLock) {
+    		this.parent.target.x = touch.touches[0].clientX - this.width / 2;
+    		this.parent.target.y = touch.touches[0].clientY - this.height / 2;
+            global.target = this.parent.target;
+    	}
     }
 
     // Chat command callback functions.
