@@ -593,5 +593,3 @@ function redrawGameElements() {
     cellsToDraw.sort((obj1, obj2) => obj1.mass - obj2.mass);
     render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
 }
-
-}
