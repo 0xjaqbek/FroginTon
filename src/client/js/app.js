@@ -47,40 +47,6 @@ function startGame(type) {
     }
 }
 
-function initializeJoystick() {
-    // Create a joystick using nipple.js
-    joystick = nipplejs.create({
-        zone: document.getElementById('gameAreaWrapper'), // Use the game area for the joystick zone
-        mode: 'dynamic',
-        color: 'blue'
-    });
-
-    joystick.on('move', function (evt, data) {
-        if (data && data.direction) {
-            const angle = data.angle.radian;
-            const distance = data.distance;
-
-            // Calculate the new target based on joystick input
-            joystickTarget.x = player.x + Math.cos(angle) * distance;
-            joystickTarget.y = player.y + Math.sin(angle) * distance;
-
-            // Ensure the target doesn't go out of bounds
-            joystickTarget.x = Math.max(0, Math.min(joystickTarget.x, global.game.width));
-            joystickTarget.y = Math.max(0, Math.min(joystickTarget.y, global.game.height));
-
-            // Update the global target for the player
-            global.target.x = joystickTarget.x;
-            global.target.y = joystickTarget.y;
-        }
-    });
-
-    joystick.on('end', function () {
-        // Stop movement when the joystick is released
-        playerMovement.x = 0;
-        playerMovement.y = 0;
-    });
-}
-
 // Checks if the nick chosen contains valid alphanumeric characters (and underscores).
 function validNick() {
     var regex = /^\w*$/;

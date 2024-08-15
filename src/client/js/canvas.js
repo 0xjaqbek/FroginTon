@@ -24,6 +24,49 @@ class Canvas {
         this.cv.addEventListener('touchmove', this.touchInput, false);  
         this.cv.parent = self;
         global.canvas = this;
+
+        // Initialize joystick if on mobile
+        if (global.mobile) {
+            this.initializeJoystick();
+        }
+    }
+
+    // Joystick initialization
+    initializeJoystick() {
+        var self = this;  // To maintain the context inside joystick events
+        this.joystick = nipplejs.create({
+            zone: document.getElementById('gameAreaWrapper'), // Use the game area for the joystick zone
+            mode: 'dynamic',
+            color: 'blue'
+        });
+
+        this.joystick.on('move', function (evt, data) {
+            if (data && data.direction) {
+                const angle = data.angle.radian;
+                const distance = data.distance;
+
+                // Calculate the new target based on joystick input
+                let joystickTarget = {
+                    x: global.player.x + Math.cos(angle) * distance,
+                    y: global.player.y + Math.sin(angle) * distance
+                };
+
+                // Ensure the target doesn't go out of bounds
+                joystickTarget.x = Math.max(0, Math.min(joystickTarget.x, global.game.width));
+                joystickTarget.y = Math.max(0, Math.min(joystickTarget.y, global.game.height));
+
+                // Update the global target for the player
+                global.target.x = joystickTarget.x;
+                global.target.y = joystickTarget.y;
+                self.touchInput({
+                    touches: [{ clientX: joystickTarget.x, clientY: joystickTarget.y }]
+                });
+            }
+        });
+
+        this.joystick.on('end', function () {
+            global.playerMovement = { x: 0, y: 0 }; // Stop movement when the joystick is released
+        });
     }
 
     // Function called when a key is pressed, will change direction if arrow key.
