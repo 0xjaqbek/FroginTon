@@ -132,6 +132,7 @@ window.onload = function () {
     } else {
         console.log("Not running in Telegram Web App");
     }
+            
             // Update player's target position based on joystick input
             if (global.mobile && joystick) {
                 player.target.x = global.target.x;
@@ -496,6 +497,7 @@ function adjustViewableArea() {
 
         // Emit the resized window dimensions to the server
         socket.emit('windowResized', { screenWidth: global.screen.width, screenHeight: global.screen.height });
+        }
     }
 }
 
