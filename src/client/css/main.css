@@ -118,6 +118,8 @@ div {
 }
 
 #startMenu {
+    align-items: center;
+    color: #ffffff;
     position: relative;
     margin: auto;
     margin-top: 10px;
@@ -126,7 +128,7 @@ div {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    background-color: white;
+    background-color: rgb(44, 44, 44);
     box-sizing: border-box;
 }
 
@@ -159,7 +161,6 @@ div {
 #startButton, #spectateButton, #settingsButton {
     position: relative;
     margin: auto;
-    margin-top: 10px;
     width: 100%;
     height: 40px;
     box-sizing: border-box;
@@ -273,7 +274,7 @@ div {
     }
 
     #startButton, #spectateButton, #settingsButton {
-        width: 90%; /* Adjust button width for smaller screens */
+        width: 100%; /* Adjust button width for smaller screens */
         height: 35px; /* Adjust button height */
     }
 

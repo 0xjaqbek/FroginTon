@@ -49,7 +49,7 @@ class Canvas {
             mode: 'static', // Set to static mode
             position: { left: joystickX + 'px', top: joystickY + 'px' }, // Position the joystick
             color: 'blue',
-            size: 100 // You can adjust the size as needed
+            size: 75 // You can adjust the size as needed
         });
 
         let initialPosition = { x: 0, y: 0 };
