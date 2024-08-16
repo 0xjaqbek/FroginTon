@@ -196,7 +196,7 @@ class Canvas {
 
         if (!this.directionLock) {
             this.parent.target.x = touchX - this.width / 2;
-            this.parent.target.y = touchY - this.height / 1.25;
+            this.parent.target.y = touchY - this.height / 2;
             global.target = this.parent.target;
         }
     }
