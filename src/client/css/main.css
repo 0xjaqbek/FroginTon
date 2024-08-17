@@ -25,7 +25,7 @@ div {
 
 #split {
     position: absolute;
-    bottom: 10px;
+    top: 10px;
     left: 10px;
     width: 100px;
     height: 100px;
@@ -35,8 +35,8 @@ div {
 
 #feed {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    top: 90px;
+    left: 10px;
     width: 100px;
     height: 100px;
     padding: 5px;

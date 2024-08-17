@@ -32,9 +32,7 @@ class Canvas {
         });
 
         this.joystick.on('end', function () {
-            self.target = { x: 0, y: 0 };  // Reset target when joystick is released
-            global.target = self.target;
-            self.socket.emit('0', self.target);
+            self.reenviar = true;
         });
 
         global.canvas = this;
