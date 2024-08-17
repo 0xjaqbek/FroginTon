@@ -6,9 +6,6 @@ var global = require('./global');
 
 var playerNameInput = document.getElementById('playerNameInput');
 var socket;
-// Initialize variables for nipple.js
-var joystick = null;
-var joystickTarget = { x: global.screen.width / 2, y: global.screen.height / 2 };
 
 var debug = function (args) {
     if (console && console.log) {
@@ -33,18 +30,13 @@ function startGame(type) {
         socket = io({ query: "type=" + type });
         setupSocket(socket);
     }
-    if (!global.animLoopHandle) {
+    if (!global.animLoopHandle)
         animloop();
-    }
     socket.emit('respawn', { playerName: global.playerName });
     window.chat.socket = socket;
     window.chat.registerFunctions();
     window.canvas.socket = socket;
     global.socket = socket;
-
-    if (global.mobile) {
-        initializeJoystick();
-    }
 }
 
 // Checks if the nick chosen contains valid alphanumeric characters (and underscores).
@@ -98,11 +90,6 @@ window.onload = function () {
     } else {
         console.log("Not running in Telegram Web App");
     }
-            // Update player's target position based on joystick input
-            if (global.mobile && joystick) {
-                player.target.x = global.target.x;
-                player.target.y = global.target.y;
-            }
 };
 
 
@@ -549,3 +536,4 @@ function redrawGameElements() {
     cellsToDraw.sort((obj1, obj2) => obj1.mass - obj2.mass);
     render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
 }
+
