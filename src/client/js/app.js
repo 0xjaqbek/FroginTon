@@ -3,7 +3,8 @@ var render = require('./render');
 var ChatClient = require('./chat-client');
 var Canvas = require('./canvas');
 var global = require('./global');
-
+// Correctly declare and initialize 'position'
+let position = { x: 0, y: 0 };
 var playerNameInput = document.getElementById('playerNameInput');
 var socket;
 
@@ -141,13 +142,43 @@ window.onload = function () {
 
 // TODO: Break out into GameControls.
 
+// Define player configuration
 var playerConfig = {
     border: 6,
     textColor: '#FFFFFF',
     textBorder: '#000000',
     textBorderSize: 3,
-    defaultSize: 30
+    defaultSize: 30,
+    image: null // Placeholder for image
 };
+
+// Load player image
+var playerImage = new Image();
+playerImage.src = '../img/Frogin.svg'; // Update with actual path
+console.log("Loading player image from:", playerImage.src);
+
+playerImage.onload = function() {
+    console.log('Player image successfully loaded:', playerImage);
+    playerConfig.image = playerImage;
+    redrawGameElements();  // Ensure the game elements are redrawn after the image is loaded
+};
+
+playerImage.onerror = function() {
+    console.error('Failed to load player image from:', playerImage.src);
+};
+
+function drawPlayerImage(position, graph, cell) {
+    const imageSize = cell.radius * 2;  // Scale the image to the cell's diameter
+    // Draw the image centered over the cell, considering the border width
+    graph.drawImage(
+        playerConfig.image, 
+        position.x - imageSize / 2, 
+        position.y - imageSize / 2, 
+        imageSize, 
+        imageSize
+    );
+}
+
 
 var player = {
     id: -1,
@@ -356,17 +387,17 @@ function animloop() {
 
 function gameLoop() {
     if (global.gameStart) {
-        // Clear the entire canvas with the background color
+        // Clear the canvas and redraw the background
         graph.fillStyle = global.backgroundColor;
         graph.fillRect(0, 0, global.screen.width, global.screen.height);
 
-        // Adjust the visible area dynamically based on the player's cell size
+        // Adjust the visible area based on the player's cell size
         adjustViewableArea();
 
-        // Redraw the grid
+        // Draw the grid
         render.drawGrid(global, player, global.screen, graph);
 
-        // Recalculate and draw each game entity based on the new screen size and player position
+        // Draw each game entity based on the new screen size and player position
         foods.forEach(food => {
             let position = getPosition(food, player, global.screen);
             render.drawFood(position, food, graph);
@@ -397,28 +428,51 @@ function gameLoop() {
         users.forEach(user => {
             let color = 'hsl(' + user.hue + ', 100%, 50%)';
             let borderColor = 'hsl(' + user.hue + ', 100%, 45%)';
-
+        
             user.cells.forEach(cell => {
+                let position = {
+                    x: cell.x - player.x + global.screen.width / 2,
+                    y: cell.y - player.y + global.screen.height / 2
+                };
+        
+                // Add each cell to the drawing queue
                 cellsToDraw.push({
                     color: color,
                     borderColor: borderColor,
                     mass: cell.mass,
                     name: user.name,
                     radius: cell.radius,
-                    x: cell.x - player.x + global.screen.width / 2,
-                    y: cell.y - player.y + global.screen.height / 2
+                    x: position.x,
+                    y: position.y
                 });
+        
+                // Draw the player image over the player's cells only
+                if (user.id === player.id) {
+                    drawPlayerImage(position, graph, cell, cell.name);
+                }
             });
         });
-
+        
+        // Sort cells by mass before drawing them
         cellsToDraw.sort((obj1, obj2) => obj1.mass - obj2.mass);
-
+        
+        // Draw cells first, then draw the player image over the player's cells
         render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
 
+        // Draw the player image over the player's cells only
+        users.forEach(user => {
+        if (user.id === player.id) {
+        user.cells.forEach(cell => {
+            let position = getPosition(cell, player, global.screen);
+            drawPlayerImage(position, graph, cell);
+        });
+    }
+});
         // Send heartbeat data
         socket.emit('0', window.canvas.target);
     }
 }
+
 
 function adjustViewableArea() {
     let maxCellSize = Math.max(...player.cells.map(cell => cell.radius * 2));
@@ -533,8 +587,21 @@ function redrawGameElements() {
             });
         });
     });
+    if (playerConfig.image) {
+        console.log('Attempting to draw player image at:', position);
+        graph.drawImage(
+            playerConfig.image,
+            position.x - playerConfig.image.width / 20,
+            position.y - playerConfig.image.height / 20
+        );
+    } else {
+        console.log('Player image not available');
+    }
 
     cellsToDraw.sort((obj1, obj2) => obj1.mass - obj2.mass);
     render.drawCells(cellsToDraw, playerConfig, global.toggleMassState, borders, graph);
+    if (!c || !graph) {
+        console.error('Canvas or context not initialized');
+    }
 }
 

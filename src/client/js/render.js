@@ -6,7 +6,7 @@ const drawRoundObject = (position, radius, graph) => {
     graph.closePath();
     graph.fill();
     graph.stroke();
-}
+};
 
 const drawFood = (position, food, graph) => {
     graph.fillStyle = 'hsl(' + food.hue + ', 100%, 50%)';
@@ -76,44 +76,59 @@ const drawCellWithLines = (cell, borders, graph) => {
 
 
 const drawCells = (cells, playerConfig, toggleMassState, borders, graph) => {
-    for (let cell of cells) {
-        if (cell.x + cell.radius < borders.left || cell.x - cell.radius > borders.right ||
-            cell.y + cell.radius < borders.top || cell.y - cell.radius > borders.bottom) {
-            continue; // Skip cells that are out of the visible area
-        }
-
+    cells.forEach(cell => {
+        // Draw the cell itself
         graph.fillStyle = cell.color;
         graph.strokeStyle = cell.borderColor;
-        graph.lineWidth = 6;
+        graph.lineWidth = playerConfig.border;
 
+        // Draw the cell with lines if it's touching borders
         if (cellTouchingBorders(cell, borders)) {
             drawCellWithLines(cell, borders, graph);
         } else {
-            drawRoundObject(cell, cell.radius, graph);
+            drawRoundObject({ x: cell.x, y: cell.y }, cell.radius, graph);
         }
 
-        // Draw the name of the player
-        let fontSize = Math.max(cell.radius / 3, 12);
-        graph.lineWidth = playerConfig.textBorderSize;
-        graph.fillStyle = playerConfig.textColor;
-        graph.strokeStyle = playerConfig.textBorder;
-        graph.miterLimit = 1;
-        graph.lineJoin = 'round';
-        graph.textAlign = 'center';
-        graph.textBaseline = 'middle';
-        graph.font = 'bold ' + fontSize + 'px sans-serif';
-        graph.strokeText(cell.name, cell.x, cell.y);
-        graph.fillText(cell.name, cell.x, cell.y);
-
-        // Draw the mass (if enabled)
-        if (toggleMassState === 1) {
-            graph.font = 'bold ' + Math.max(fontSize / 3 * 2, 10) + 'px sans-serif';
-            if (cell.name.length === 0) fontSize = 0;
-            graph.strokeText(Math.round(cell.mass), cell.x, cell.y + fontSize);
-            graph.fillText(Math.round(cell.mass), cell.x, cell.y + fontSize);
+        // Draw the player image over the player's cells only
+        if (cell.isPlayerCell && playerConfig.image) {
+            drawPlayerImage({ x: cell.x, y: cell.y }, graph, cell);
         }
-    }
+
+        // Draw the cell's name
+        if (cell.name) {
+            graph.lineWidth = playerConfig.textBorderSize;
+            graph.fillStyle = playerConfig.textColor;
+            graph.strokeStyle = playerConfig.textBorder;
+            graph.textBaseline = 'middle';
+            graph.textAlign = 'center';
+            graph.font = `bold ${Math.max(cell.radius / 3, 12)}px sans-serif`;
+
+            // Calculate the position for the name to be above the image
+            const nameYPosition = cell.y - cell.radius - Math.max(cell.radius / 3, 12) / 2;
+
+            // Render the name above the image
+            graph.strokeText(cell.name, cell.x, nameYPosition);
+            graph.fillText(cell.name, cell.x, nameYPosition);
+        }
+
+        // Draw the cell's mass if toggled on
+        if (toggleMassState) {
+            const massText = Math.ceil(cell.mass).toString();
+            graph.lineWidth = playerConfig.textBorderSize;
+            graph.fillStyle = playerConfig.textColor;
+            graph.strokeStyle = playerConfig.textBorder;
+            graph.font = `bold ${Math.max(cell.radius / 4, 10)}px sans-serif`;
+
+            // Render the mass slightly below the name
+            graph.strokeText(massText, cell.x, cell.y + cell.radius / 2);
+            graph.fillText(massText, cell.x, cell.y + cell.radius / 2);
+        }
+    });
 };
+
+
+
+
 
 
 const drawGrid = (global, player, screen, graph) => {
@@ -161,8 +176,8 @@ module.exports = {
     drawFood,
     drawVirus,
     drawFireFood,
-    drawCells,
     drawErrorMessage,
     drawGrid,
-    drawBorder
+    drawBorder,
+    drawCells
 };
