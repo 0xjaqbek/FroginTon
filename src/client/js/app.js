@@ -179,6 +179,39 @@ function drawPlayerImage(position, graph, cell) {
     );
 }
 
+var virusConfig = {
+    image: null // Placeholder for virus image
+};
+
+// Load virus image
+var virusImage = new Image();
+virusImage.src = '../img/spansor.png'; // Update with the actual path to spansor.png
+console.log("Loading virus image from:", virusImage.src);
+
+virusImage.onload = function() {
+    console.log('Virus image successfully loaded:', virusImage);
+    virusConfig.image = virusImage;
+    redrawGameElements();  // Ensure the game elements are redrawn after the image is loaded
+};
+
+virusImage.onerror = function() {
+    console.error('Failed to load virus image from:', virusImage.src);
+};
+
+function drawVirusImage(position, graph, virus) {
+    if (virusConfig.image) {
+        const imageSize = virus.radius * 2;  // Scale the image to the virus's diameter
+        graph.drawImage(
+            virusConfig.image, 
+            position.x - imageSize / 2, 
+            position.y - imageSize / 2, 
+            imageSize, 
+            imageSize
+        );
+    } else {
+        console.error('Virus image is not loaded or available');
+    }
+}
 
 var player = {
     id: -1,
@@ -410,7 +443,7 @@ function gameLoop() {
 
         viruses.forEach(virus => {
             let position = getPosition(virus, player, global.screen);
-            render.drawVirus(position, virus, graph);
+            drawVirusImage(position, graph, virus);
         });
 
         let borders = {

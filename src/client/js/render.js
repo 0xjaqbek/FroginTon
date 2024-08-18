@@ -15,21 +15,27 @@ const drawFood = (position, food, graph) => {
     drawRoundObject(position, food.radius, graph);
 };
 
+// Update the drawVirus function to use the image
 const drawVirus = (position, virus, graph) => {
-    graph.strokeStyle = virus.stroke;
-    graph.fillStyle = virus.fill;
-    graph.lineWidth = virus.strokeWidth;
-    let theta = 0;
-    let sides = 20;
+    if (virusConfig.image) {
+        drawVirusImage(position, graph, virus);
+    } else {
+        // Fallback if image is not loaded, draw the virus as a polygon
+        graph.strokeStyle = virus.stroke;
+        graph.fillStyle = virus.fill;
+        graph.lineWidth = virus.strokeWidth;
+        let theta = 0;
+        let sides = 20;
 
-    graph.beginPath();
-    for (let theta = 0; theta < FULL_ANGLE; theta += FULL_ANGLE / sides) {
-        let point = circlePoint(position, virus.radius, theta);
-        graph.lineTo(point.x, point.y);
+        graph.beginPath();
+        for (let theta = 0; theta < FULL_ANGLE; theta += FULL_ANGLE / sides) {
+            let point = circlePoint(position, virus.radius, theta);
+            graph.lineTo(point.x, point.y);
+        }
+        graph.closePath();
+        graph.stroke();
+        graph.fill();
     }
-    graph.closePath();
-    graph.stroke();
-    graph.fill();
 };
 
 const drawFireFood = (position, mass, playerConfig, graph) => {
