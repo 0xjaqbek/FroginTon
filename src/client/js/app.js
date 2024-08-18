@@ -286,6 +286,8 @@ function setupSocket(socket) {
         player.screenWidth = global.screen.width;
         player.screenHeight = global.screen.height;
         player.target = window.canvas.target;
+        // Ensure player.cells is an array
+        player.cells = player.cells || [];    
         global.player = player;
         window.chat.player = player;
         socket.emit('gotit', player);
