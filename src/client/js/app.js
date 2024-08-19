@@ -168,12 +168,12 @@ playerImage.onerror = function() {
 };
 
 function drawPlayerImage(position, graph, cell) {
-    const imageSize = cell.radius * 2;  // Scale the image to the cell's diameter
+    const imageSize = cell.radius * 1.7;  // Scale the image to the cell's diameter
     // Draw the image centered over the cell, considering the border width
     graph.drawImage(
         playerConfig.image, 
         position.x - imageSize / 2, 
-        position.y - imageSize / 2, 
+        position.y - imageSize / 1.8, 
         imageSize, 
         imageSize
     );

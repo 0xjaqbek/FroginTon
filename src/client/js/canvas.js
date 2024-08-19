@@ -20,7 +20,7 @@ class Canvas {
             zone: document.getElementById('joystick-zone'),  // assuming there is a div with id 'joystick-zone'
             mode: 'static',
             position: { left: '50%', top: '80%' },
-            color: 'blue',
+            color: 'white',
             size: 100,
         });
 
