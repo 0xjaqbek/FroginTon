@@ -13,9 +13,9 @@ class Canvas {
         this.cv = document.getElementById('cvs');
         this.cv.width = global.screen.width;
         this.cv.height = global.screen.height;
-
-
-        // Initialize joystick with nipple.js
+    
+        
+            // Initialize joystick with nipple.js
         this.joystick = nipplejs.create({
             zone: document.getElementById('joystick-zone'),  // assuming there is a div with id 'joystick-zone'
             mode: 'static',
@@ -26,8 +26,8 @@ class Canvas {
 
         // Handle joystick move events
         this.joystick.on('move', function (evt, data) {
-            if (data && data.vector) {
-                self.handleJoystickInput(data.vector);
+            if (data && data.vector && data.distance) {
+                self.handleJoystickInput(data.vector, data.distance);
             }
         });
 
@@ -38,22 +38,35 @@ class Canvas {
         global.canvas = this;
     }
 
-    handleJoystickInput(vector) {
+    handleJoystickInput(vector, distance) {
         // Invert the y-axis
         let x = vector.x;
         let y = -vector.y;
 
+        // Normalize the distance to a value between 0 and 1
+        const maxDistance = this.joystick.options.size / 2; // Half the joystick size is the maximum distance
+        let normalizedDistance = Math.min(distance / maxDistance, 1); // Ensure it stays within [0, 1]
+
+        // Define speedFactor based on distance ranges
+        let speedFactor;
+        if (normalizedDistance < 0.67) {
+            // First two-thirds: apply a quadratic function for a gradual increase
+            speedFactor = Math.pow(normalizedDistance / 0.67, 2) * 0.5;
+        } else {
+            // Last third: use a linear function that ramps up quickly
+            speedFactor = 0.5 + ((normalizedDistance - 0.67) / 0.33) * 0.5;
+        }
+
+        // Adjust target coordinates based on the speed factor
         this.target = {
-            x: x * Number.MAX_VALUE,
-            y: y * Number.MAX_VALUE
+            x: x * speedFactor * Number.MAX_VALUE,
+            y: y * speedFactor * Number.MAX_VALUE
         };
 
         global.target = this.target;
         this.socket.emit('0', this.target);
     }
 
-    // Remove old directionDown, directionUp, gameInput, touchInput, keyInput methods
-    // as they are replaced by joystick input
 }
 
 module.exports = Canvas;

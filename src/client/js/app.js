@@ -168,15 +168,50 @@ playerImage.onerror = function() {
 };
 
 function drawPlayerImage(position, graph, cell) {
-    const imageSize = cell.radius * 1.7;  // Scale the image to the cell's diameter
-    // Draw the image centered over the cell, considering the border width
-    graph.drawImage(
-        playerConfig.image, 
-        position.x - imageSize / 2, 
-        position.y - imageSize / 1.8, 
-        imageSize, 
-        imageSize
-    );
+    const imageSize = cell.radius * 1.65;  // Scale the image to the cell's diameter
+
+    if (isAnimating && animationFrames.length === 5) {
+        // Calculate the current frame based on the elapsed time
+        let elapsedTime = (Date.now() - animationStartTime) / 1000; // in seconds
+        currentFrameIndex = Math.floor(elapsedTime / frameInterval) % 5;
+
+        // Draw the current frame of the animation
+        graph.drawImage(
+            animationFrames[currentFrameIndex],
+            position.x - imageSize / 2,
+            position.y - imageSize / 1.9,
+            imageSize,
+            imageSize
+        );
+
+        // Stop the animation if it's completed
+        if (elapsedTime >= animationDuration) {
+            isAnimating = false;
+        }
+    } else {
+        // Draw the regular player image
+        graph.drawImage(
+            playerConfig.image, 
+            position.x - imageSize / 2, 
+            position.y - imageSize / 1.9, 
+            imageSize, 
+            imageSize
+        );
+    }
+}
+
+var animationFrames = [];
+var currentFrameIndex = 0;
+var isAnimating = false;
+var animationStartTime = null;
+var animationDuration = 0.5; // duration in seconds
+var frameInterval = animationDuration / 5; // 5 frames, so divide the duration
+
+// Load animation frames
+for (let i = 1; i <= 5; i++) {
+    let img = new Image();
+    img.src = `../img/F${i}.svg`; // Assuming all SVGs are in the same directory
+    animationFrames.push(img);
 }
 
 var virusConfig = {
@@ -352,6 +387,11 @@ socket.on('playerJoin', (data) => {
     // Handle movement.
     socket.on('serverTellPlayerMove', function (playerData, userData, foodsList, massList, virusList) {
         if (global.playerType == 'player') {
+     // Check if player gained mass
+        if (playerData.massTotal > player.massTotal) {
+            isAnimating = true;
+            animationStartTime = Date.now();
+        }
             player.x = playerData.x;
             player.y = playerData.y;
             player.hue = playerData.hue;
