@@ -110,7 +110,7 @@ const drawCells = (cells, playerConfig, toggleMassState, borders, graph) => {
             graph.font = `bold ${Math.max(cell.radius / 3, 12)}px sans-serif`;
 
             // Calculate the position for the name to be above the image
-            const nameYPosition = cell.y - cell.radius - Math.max(cell.radius / 3, 12) / 2;
+            const nameYPosition = cell.y - cell.radius - Math.max(cell.radius / 3, 12) / 1.9;
 
             // Render the name above the image
             graph.strokeText(cell.name, cell.x, nameYPosition);
