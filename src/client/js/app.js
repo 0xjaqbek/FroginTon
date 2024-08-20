@@ -154,7 +154,7 @@ var playerConfig = {
 
 // Load player image
 var playerImage = new Image();
-playerImage.src = '../img/Frogin.svg'; // Update with actual path
+playerImage.src = '../img/Frogin_main.svg'; // Update with actual path
 console.log("Loading player image from:", playerImage.src);
 
 playerImage.onload = function() {
