@@ -144,7 +144,7 @@ window.onload = function () {
 
 // Define player configuration
 var playerConfig = {
-    border: 6,
+    border: 0,
     textColor: '#FFFFFF',
     textBorder: '#000000',
     textBorderSize: 3,
@@ -168,7 +168,7 @@ playerImage.onerror = function() {
 };
 
 function drawPlayerImage(position, graph, cell) {
-    const imageSize = cell.radius * 1.65;  // Scale the image to the cell's diameter
+    const imageSize = cell.radius * 2.2;  // Scale the image to the cell's diameter
 
     if (isAnimating && animationFrames.length === 5) {
         // Calculate the current frame based on the elapsed time
@@ -179,7 +179,7 @@ function drawPlayerImage(position, graph, cell) {
         graph.drawImage(
             animationFrames[currentFrameIndex],
             position.x - imageSize / 2,
-            position.y - imageSize / 1.9,
+            position.y - imageSize / 2,
             imageSize,
             imageSize
         );
@@ -193,7 +193,7 @@ function drawPlayerImage(position, graph, cell) {
         graph.drawImage(
             playerConfig.image, 
             position.x - imageSize / 2, 
-            position.y - imageSize / 1.9, 
+            position.y - imageSize / 2, 
             imageSize, 
             imageSize
         );
@@ -501,8 +501,8 @@ function gameLoop() {
 
         var cellsToDraw = [];
         users.forEach(user => {
-            let color = 'hsl(' + user.hue + ', 100%, 50%)';
-            let borderColor = 'hsl(' + user.hue + ', 100%, 45%)';
+            let color = 'hsl(' + user.hue + ', 100%, 50%, 0.01)';
+            let borderColor = 'hsl(' + user.hue + ', 100%, 45%, 0.1)';
         
             user.cells.forEach(cell => {
                 let position = {
