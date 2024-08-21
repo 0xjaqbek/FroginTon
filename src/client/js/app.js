@@ -66,14 +66,14 @@ window.onload = function () {
 
         if (isDarkTheme) {
             // Apply dark theme styles
-            document.documentElement.style.setProperty('--tg-theme-bg-color', '#333333');
-            document.documentElement.style.setProperty('--tg-theme-header-bg-color', '#444444');
-            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', '#555555');
+            document.documentElement.style.setProperty('--tg-theme-bg-color', rgb(66, 66, 66));
+            document.documentElement.style.setProperty('--tg-theme-header-bg-color', rgb(66, 66, 66));
+            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', rgb(66, 66, 66));
         } else {
             // Apply light theme styles
-            document.documentElement.style.setProperty('--tg-theme-bg-color', '#FFFFFF');
-            document.documentElement.style.setProperty('--tg-theme-header-bg-color', '#F0F0F0');
-            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', '#E0E0E0');
+            document.documentElement.style.setProperty('--tg-theme-bg-color', rgb(66, 66, 66));
+            document.documentElement.style.setProperty('--tg-theme-header-bg-color', rgb(66, 66, 66));
+            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', rgb(66, 66, 66));
         }
     }
 
