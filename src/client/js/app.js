@@ -55,6 +55,9 @@ window.onload = function () {
     if (isTelegramWebApp) {
         console.log("Running in Telegram Web App");
         window.Telegram.WebApp.disableVerticalSwipes();
+        window.Telegram.WebApp.onEvent('themeChanged', function() {
+            // Handle theme changes if necessary
+        });
 
         Telegram.WebApp.ready();
 
