@@ -252,7 +252,7 @@ otherUsersImage.onerror = function() {
 };
 
 function drawOtherUserImage(position, graph, cell) {
-    const imageSize = cell.radius * 2.2;  // Scale the image to the cell's diameter
+    const imageSize = cell.radius * 2;  // Scale the image to the cell's diameter
 
     // Draw the image for other users' cells
     graph.drawImage(
