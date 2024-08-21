@@ -170,8 +170,11 @@ playerImage.onerror = function() {
 };
 
 function drawPlayerImage(position, graph, cell) {
-    const imageSize = cell.radius * 2.2;  // Scale the image to the cell's diameter
+    const imageSize = cell.radius * 2;  // Scale the image to the cell's diameter
+    const textSize = 12; // Size of the font
+    const textColor = '#FFFFFF'; // Color of the text
 
+    // Draw the player image
     if (isAnimating && animationFrames.length === 5) {
         // Calculate the current frame based on the elapsed time
         let elapsedTime = (Date.now() - animationStartTime) / 1000; // in seconds
@@ -200,7 +203,21 @@ function drawPlayerImage(position, graph, cell) {
             imageSize
         );
     }
+
+    // Draw the mass next to the player's cell
+    graph.font = `${textSize}px Arial`;
+    graph.fillStyle = textColor;
+    graph.textAlign = 'center';
+    graph.textBaseline = 'middle';
+
+    // Position the text to the right of the cell
+    graph.fillText(
+        Math.round(cell.mass), 
+        position.x,
+        position.y + imageSize / 2 + 10,  // Adjust the offset as needed
+    );
 }
+
 
 var animationFrames = [];
 var currentFrameIndex = 0;
