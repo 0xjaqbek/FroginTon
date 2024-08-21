@@ -253,6 +253,8 @@ otherUsersImage.onerror = function() {
 
 function drawOtherUserImage(position, graph, cell) {
     const imageSize = cell.radius * 2.2;  // Scale the image to the cell's diameter
+
+    // Draw the image for other users' cells
     graph.drawImage(
         otherUsersImage, 
         position.x - imageSize / 2, 
@@ -260,7 +262,21 @@ function drawOtherUserImage(position, graph, cell) {
         imageSize, 
         imageSize
     );
+
+    // Draw the mass next to the other player's cell
+    graph.font = '12px Arial';
+    graph.fillStyle = '#FFFFFF';
+    graph.textAlign = 'center';
+    graph.textBaseline = 'middle';
+
+    // Position the text to the right of the cell
+    graph.fillText(
+        Math.round(cell.mass), 
+        position.x,
+        position.y + imageSize / 2 + 10  // Adjust the offset as needed
+    );
 }
+
 
 var sponsorImage = new Image();
 sponsorImage.src = '../img/Sponsor_3.png'; // Update with the actual path
