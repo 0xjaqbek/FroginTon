@@ -38,6 +38,7 @@ function startGame(type) {
     window.chat.registerFunctions();
     window.canvas.socket = socket;
     global.socket = socket;
+    redrawGameElements();
 }
 
 // Checks if the nick chosen contains valid alphanumeric characters (and underscores).
@@ -217,6 +218,44 @@ for (let i = 1; i <= 5; i++) {
 
 var virusConfig = {
     image: null // Placeholder for virus image
+};
+
+// Load the image for other users' cells
+var otherUsersImage = new Image();
+otherUsersImage.src = '../img/Sponsor_2.png'; // Path to the image
+console.log("Loading image for other users' cells from:", otherUsersImage.src);
+
+otherUsersImage.onload = function() {
+    console.log('Image for other users\' cells successfully loaded:', otherUsersImage);
+    redrawGameElements();  // Ensure the game elements are redrawn after the image is loaded
+};
+
+otherUsersImage.onerror = function() {
+    console.error('Failed to load image for other users\' cells from:', otherUsersImage.src);
+};
+
+function drawOtherUserImage(position, graph, cell) {
+    const imageSize = cell.radius * 2.2;  // Scale the image to the cell's diameter
+    graph.drawImage(
+        otherUsersImage, 
+        position.x - imageSize / 2, 
+        position.y - imageSize / 2, 
+        imageSize, 
+        imageSize
+    );
+}
+
+var sponsorImage = new Image();
+sponsorImage.src = '../img/Sponsor_3.png'; // Update with the actual path
+console.log("Loading sponsor image from:", sponsorImage.src);
+
+sponsorImage.onload = function() {
+    console.log('Sponsor image successfully loaded:', sponsorImage);
+    redrawGameElements();  // Ensure the game elements are redrawn after the image is loaded
+};
+
+sponsorImage.onerror = function() {
+    console.error('Failed to load sponsor image from:', sponsorImage.src);
 };
 
 // Load virus image
@@ -521,10 +560,10 @@ function gameLoop() {
                     x: position.x,
                     y: position.y
                 });
-        
-                // Draw the player image over the player's cells only
-                if (user.id === player.id) {
-                    drawPlayerImage(position, graph, cell, cell.name);
+
+                // Draw the image for other users' cells
+                if (user.id !== player.id) {
+                    drawOtherUserImage(position, graph, cell);
                 }
             });
         });
@@ -537,13 +576,14 @@ function gameLoop() {
 
         // Draw the player image over the player's cells only
         users.forEach(user => {
-        if (user.id === player.id) {
-        user.cells.forEach(cell => {
-            let position = getPosition(cell, player, global.screen);
-            drawPlayerImage(position, graph, cell);
+            if (user.id === player.id) {
+                user.cells.forEach(cell => {
+                    let position = getPosition(cell, player, global.screen);
+                    drawPlayerImage(position, graph, cell);
+                });
+            }
         });
-    }
-});
+
         // Send heartbeat data
         socket.emit('0', window.canvas.target);
     }
@@ -582,7 +622,6 @@ function adjustViewableArea() {
 function resize() {
     if (!socket) return;
 
-    // Adjust screen dimensions based on device type
     if (global.mobile) {
         global.screen.width = window.innerWidth;
         global.screen.height = window.innerHeight;
@@ -591,31 +630,43 @@ function resize() {
         global.screen.height = global.playerType == 'player' ? window.innerHeight : global.game.height;
     }
 
-    // Update canvas size if it has changed
     if (c.width !== global.screen.width || c.height !== global.screen.height) {
         c.width = global.screen.width;
         c.height = global.screen.height;
     }
 
-    // Update player screen size
     player.screenWidth = global.screen.width;
     player.screenHeight = global.screen.height;
 
-    // Ensure the player is centered within the new screen dimensions
     player.x = Math.max(Math.min(player.x, global.game.width - global.screen.width / 2), global.screen.width / 2);
     player.y = Math.max(Math.min(player.y, global.game.height - global.screen.height / 2), global.screen.height / 2);
 
-    // Trigger redraw after resizing
     redrawGameElements();
 
-    // Emit the resized window dimensions to the server
     socket.emit('windowResized', { screenWidth: global.screen.width, screenHeight: global.screen.height });
 }
+
 
 function redrawGameElements() {
     // Clear the entire canvas with the background color
     graph.fillStyle = global.backgroundColor;
     graph.fillRect(0, 0, global.screen.width, global.screen.height);
+
+    // Check if sponsor image is loaded and log details
+    if (sponsorImage && sponsorImage.complete) {
+        console.log('Drawing sponsor image...');
+        const sponsorImageWidth = global.screen.width; // Scale width to 50% of screen width
+        const sponsorImageHeight = sponsorImageWidth / sponsorImage.width * sponsorImage.height; // Maintain aspect ratio
+        graph.drawImage(
+            sponsorImage, 
+            (global.screen.width - sponsorImageWidth) / 2, // Center horizontally
+            10, // Top margin of 10 pixels
+            sponsorImageWidth,
+            sponsorImageHeight
+        );
+    } else {
+        console.error('Sponsor image is not loaded or available');
+    }
 
     // Redraw grid and all game elements
     render.drawGrid(global, player, global.screen, graph);

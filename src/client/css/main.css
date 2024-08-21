@@ -31,7 +31,7 @@ div {
 
 #split {
     position: absolute;
-    top: 10px;
+    top: 50px;
     left: 10px;
     width: 100px;
     height: 100px;
@@ -41,8 +41,8 @@ div {
 
 #feed {
     position: absolute;
-    top: 90px;
-    left: 10px;
+    top: 50px;
+    left: 90px;
     width: 100px;
     height: 100px;
     padding: 5px;
@@ -55,7 +55,7 @@ div {
     background: rgba(0, 0, 0, 0.4);
     color: #FFF;
     font-size: 16.1px;
-    top: 10px;
+    top: 50px;
     right: 10px;
     font-weight: bold;
     text-align: center;
@@ -286,7 +286,7 @@ div {
 
     #status {
         font-size: 14px; /* Smaller font size for status */
-        top: 5px; /* Adjust position */
+        top: 50px; /* Adjust position */
         right: 5px; /* Adjust position */
     }
 

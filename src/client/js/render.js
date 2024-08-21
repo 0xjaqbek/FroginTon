@@ -134,10 +134,44 @@ const drawCells = (cells, playerConfig, toggleMassState, borders, graph) => {
 
 
 
+// Define the sponsor image globally so it's accessible everywhere
+let sponsorImage = new Image();
 
+// Set the source of the sponsor image
+sponsorImage.src = '../img/Sponsor_3.png'; // Update this path as necessary
 
+// Ensure the image is loaded before drawing it
+sponsorImage.onload = function() {
+    console.log('Sponsor image successfully loaded:', sponsorImage);
+
+    // Redraw or reinitialize the canvas or game if necessary
+    // to ensure the sponsor image is drawn as expected.
+};
+
+sponsorImage.onerror = function() {
+    console.error('Error loading sponsor image');
+};
 
 const drawGrid = (global, player, screen, graph) => {
+    // Draw the sponsor image at the top of the screen
+    if (sponsorImage.complete && sponsorImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
+        console.log('Drawing sponsor image...');
+
+        const sponsorImageWidth = screen.width; // Scale width to 50% of screen width
+        const sponsorImageHeight = sponsorImageWidth / sponsorImage.naturalWidth * sponsorImage.naturalHeight; // Maintain aspect ratio
+
+        graph.drawImage(
+            sponsorImage,
+            (screen.width - sponsorImageWidth) / 2, // Center horizontally
+            10, // Top margin of 10 pixels
+            sponsorImageWidth,
+            sponsorImageHeight
+        );
+    } else {
+        console.warn('Sponsor image not yet loaded or has invalid dimensions');
+    }
+
+    // Draw the grid
     graph.lineWidth = 1;
     graph.strokeStyle = global.lineColor;
     graph.globalAlpha = 0.15;
@@ -156,6 +190,7 @@ const drawGrid = (global, player, screen, graph) => {
     graph.stroke();
     graph.globalAlpha = 1;
 };
+
 
 const drawBorder = (borders, graph) => {
     graph.lineWidth = 1;
