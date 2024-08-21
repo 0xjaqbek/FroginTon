@@ -55,30 +55,6 @@ window.onload = function () {
     if (isTelegramWebApp) {
         console.log("Running in Telegram Web App");
         window.Telegram.WebApp.disableVerticalSwipes();
-    // Listen for theme changes
-    window.Telegram.WebApp.onEvent('themeChanged', function() {
-        updateTheme();
-    });
-
-    function updateTheme() {
-        // Example: Update CSS variables or class names based on theme
-        const isDarkTheme = window.Telegram.WebApp.themeParams.isDark;
-
-        if (isDarkTheme) {
-            // Apply dark theme styles
-            document.documentElement.style.setProperty('--tg-theme-bg-color', rgb(66, 66, 66));
-            document.documentElement.style.setProperty('--tg-theme-header-bg-color', rgb(66, 66, 66));
-            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', rgb(66, 66, 66));
-        } else {
-            // Apply light theme styles
-            document.documentElement.style.setProperty('--tg-theme-bg-color', rgb(66, 66, 66));
-            document.documentElement.style.setProperty('--tg-theme-header-bg-color', rgb(66, 66, 66));
-            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', rgb(66, 66, 66));
-        }
-    }
-
-    // Initial theme update
-    updateTheme();
 
         Telegram.WebApp.ready();
 
