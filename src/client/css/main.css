@@ -4,9 +4,9 @@
 }
 
 :root {
-    --tg-theme-bg-color: rgb(66, 66, 66);
+    --tg-theme-bg-color: rgb(255, 255, 255);
     --tg-theme-header-bg-color: rgb(255, 255, 255);
-    --tg-theme-secondary_bg_color: rgb(66, 66, 66);
+    --tg-theme-secondary_bg_color: rgb(255, 255, 255);
 }
 
 html, body {
