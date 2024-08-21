@@ -55,9 +55,30 @@ window.onload = function () {
     if (isTelegramWebApp) {
         console.log("Running in Telegram Web App");
         window.Telegram.WebApp.disableVerticalSwipes();
-        window.Telegram.WebApp.onEvent('themeChanged', function() {
-            // Handle theme changes if necessary
-        });
+    // Listen for theme changes
+    window.Telegram.WebApp.onEvent('themeChanged', function() {
+        updateTheme();
+    });
+
+    function updateTheme() {
+        // Example: Update CSS variables or class names based on theme
+        const isDarkTheme = window.Telegram.WebApp.themeParams.isDark;
+
+        if (isDarkTheme) {
+            // Apply dark theme styles
+            document.documentElement.style.setProperty('--tg-theme-bg-color', '#333333');
+            document.documentElement.style.setProperty('--tg-theme-header-bg-color', '#444444');
+            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', '#555555');
+        } else {
+            // Apply light theme styles
+            document.documentElement.style.setProperty('--tg-theme-bg-color', '#FFFFFF');
+            document.documentElement.style.setProperty('--tg-theme-header-bg-color', '#F0F0F0');
+            document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', '#E0E0E0');
+        }
+    }
+
+    // Initial theme update
+    updateTheme();
 
         Telegram.WebApp.ready();
 
