@@ -3,6 +3,10 @@
     font-size: 14px;
 }
 
+:root {
+    --tg-theme-header-bg-color: rgb(66, 66, 66); /* Default color */
+}
+
 html, body {
     background-color: #222;
     overflow: hidden;
