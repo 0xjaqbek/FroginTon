@@ -4,6 +4,7 @@
 }
 
 :root {
+    --tg-theme-bg-color: rgb(66, 66, 66);
     --tg-theme-header-bg-color: rgb(66, 66, 66);
     --tg-theme-secondary_bg_color: rgb(66, 66, 66);
 }
