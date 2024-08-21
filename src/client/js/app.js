@@ -57,6 +57,7 @@ window.onload = function () {
         window.Telegram.WebApp.disableVerticalSwipes();
         document.documentElement.style.setProperty('--tg-theme-secondary_bg_color', 'rgb(66, 66, 66)');
         document.documentElement.style.setProperty('--tg-theme-header-bg-color: rgb(66, 66, 66)');
+        Telegram.WebApp.setHeaderColor('secondary_bg_color');
 
         Telegram.WebApp.ready();
 
