@@ -58,6 +58,7 @@ window.onload = function () {
 
         Telegram.WebApp.ready();
         Telegram.WebApp.setHeaderColor('secondary_bg_color');
+        console.log("Header color", Telegram.WebApp.setHeaderColor);
         // Debug: Check the entire initDataUnsafe object
         console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
 
