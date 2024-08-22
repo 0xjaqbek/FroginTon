@@ -7,7 +7,7 @@ var global = require('./global');
 let position = { x: 0, y: 0 };
 var playerNameInput = document.getElementById('playerNameInput');
 var socket;
-
+let initialMass = 0;
 var debug = function (args) {
     if (console && console.log) {
         console.log(args);
@@ -340,6 +340,9 @@ $("#split").click(function () {
 
 function handleDisconnect() {
     socket.close();
+    const currentMass = player.massTotal || 0;
+    const massGained = currentMass - (initialMass || 0);
+    console.log(`Mass gained during the game: ${massGained}`);
     if (!global.kicked) { // We have a more specific error message 
         render.drawErrorMessage('Disconnected!', graph, global.screen);
     }
@@ -369,6 +372,7 @@ function setupSocket(socket) {
         player.cells = player.cells || [];    
         global.player = player;
         window.chat.player = player;
+        initialMass = player.massTotal || 0;
         socket.emit('gotit', player);
         global.gameStart = true;
         window.chat.addSystemLine('Connected to the game!');
@@ -451,6 +455,9 @@ socket.on('playerJoin', (data) => {
     // Death.
     socket.on('RIP', function () {
         global.gameStart = false;
+        const currentMass = player.massTotal || 0;
+        const massGained = currentMass - (initialMass || 0);
+        console.log(`Mass gained during the game: ${massGained}`);
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
             document.getElementById('gameAreaWrapper').style.opacity = 0;
@@ -465,6 +472,9 @@ socket.on('playerJoin', (data) => {
     socket.on('kick', function (reason) {
         global.gameStart = false;
         global.kicked = true;
+        const currentMass = player.massTotal || 0;
+        const massGained = currentMass - (initialMass || 0);
+        console.log(`Mass gained during the game: ${massGained}`);
         if (reason !== '') {
             render.drawErrorMessage('You were kicked for: ' + reason, graph, global.screen);
         }
