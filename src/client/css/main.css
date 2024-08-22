@@ -4,7 +4,7 @@
 }
 
 :root {
-    --tg-theme-bg-color: #00000000;
+    --tg-theme-bg-color: #000000;
     --tg-theme-header-bg-color: rgb(255, 255, 255);
     --tg-theme-secondary_bg_color: rgb(255, 255, 255);
 }
@@ -22,7 +22,7 @@ body, input, button {
 }
 
 html, body {
-    background-color: #000000;
+    background-color: #00000000;
     overflow: hidden;
 }
 
@@ -31,7 +31,7 @@ html, body, canvas {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: rgb(0, 0, 0);
+    background: #00000000;
 }
 
 div {
