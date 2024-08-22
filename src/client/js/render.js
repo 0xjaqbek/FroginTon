@@ -152,7 +152,50 @@ sponsorImage.onerror = function() {
     console.error('Error loading sponsor image');
 };
 
+// Define and load the arena image globally
+const arenaImage = new Image();
+arenaImage.src = '../img/arena.png'; // Update the path as necessary
+
+// Handle successful loading
+arenaImage.onload = function() {
+    console.log('Arena image loaded successfully');
+    // Optionally, trigger a redraw or re-render if necessary
+};
+
+// Handle loading errors
+arenaImage.onerror = function() {
+    console.error('Failed to load arena image');
+};
+
 const drawGrid = (global, player, screen, graph) => {
+    // Draw the arena image as the background
+    if (arenaImage.complete && arenaImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
+        console.log('Drawing arena image...');
+
+        let arenaImageWidth;
+        let arenaImageHeight;
+
+        if (screen.width <= screen.height) {
+            // On mobile devices (screen width <= screen height), fit the image to screen width
+            arenaImageWidth = screen.width;
+            arenaImageHeight = arenaImageWidth / arenaImage.naturalWidth * arenaImage.naturalHeight;
+        } else {
+            // On larger screens (screen width > screen height), fit the image to screen height
+            arenaImageHeight = screen.height;
+            arenaImageWidth = arenaImageHeight / arenaImage.naturalHeight * arenaImage.naturalWidth;
+        }
+
+        graph.drawImage(
+            arenaImage,
+            (screen.width - arenaImageWidth) / 2, // Center horizontally
+            (screen.height - arenaImageHeight) / 2, // Center vertically
+            arenaImageWidth,
+            arenaImageHeight
+        );
+    } else {
+        console.warn('Arena image not yet loaded or has invalid dimensions');
+    }
+
     // Draw the sponsor image at the top of the screen
     if (sponsorImage.complete && sponsorImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
         console.log('Drawing sponsor image...');
@@ -190,6 +233,7 @@ const drawGrid = (global, player, screen, graph) => {
     graph.stroke();
     graph.globalAlpha = 1;
 };
+
 
 
 const drawBorder = (borders, graph) => {
