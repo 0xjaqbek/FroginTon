@@ -338,36 +338,11 @@ $("#split").click(function () {
     window.canvas.reenviar = false;
 });
 
-function sendMassToServer(massGained) {
-    const url = 'https://froginpoints-6349a3f2a455.herokuapp.com/';  // Your Heroku app URL
-    const data = {
-        name: global.playerName,
-        points: massGained
-    };
-
-    // Make an HTTP POST request
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
-
 function handleDisconnect() {
     socket.close();
     const currentMass = player.massTotal || 0;
     const massGained = currentMass - (initialMass || 0);
     console.log(`Mass gained during the game: ${massGained}`);
-    sendMassToServer(massGained);
     if (!global.kicked) { // We have a more specific error message 
         render.drawErrorMessage('Disconnected!', graph, global.screen);
     }
@@ -483,7 +458,6 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
-        sendMassToServer(massGained);
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
             document.getElementById('gameAreaWrapper').style.opacity = 0;
@@ -501,7 +475,6 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
-        sendMassToServer(massGained);
         if (reason !== '') {
             render.drawErrorMessage('You were kicked for: ' + reason, graph, global.screen);
         }
@@ -772,4 +745,3 @@ function redrawGameElements() {
         console.error('Canvas or context not initialized');
     }
 }
-
