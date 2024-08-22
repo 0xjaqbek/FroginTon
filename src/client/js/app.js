@@ -98,35 +98,18 @@ window.onload = function () {
 
 
 
-    var btn = document.getElementById('startButton'),
-        btnS = document.getElementById('spectateButton'),
-        nickErrorText = document.querySelector('#startMenu .input-error');
+var btn = document.getElementById('startButton');
+var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
 
-    btnS.onclick = function () {
-        startGame('spectator');
-    };
-
-    btn.onclick = function () {
-
-        // Checks if the nick is valid.
-        if (validNick()) {
-            nickErrorText.style.opacity = 0;
-            startGame('player');
-        } else {
-            nickErrorText.style.opacity = 1;
-        }
-    };
-
-    var settingsMenu = document.getElementById('settingsButton');
-    var settings = document.getElementById('settings');
-
-    settingsMenu.onclick = function () {
-        if (settings.style.maxHeight == '300px') {
-            settings.style.maxHeight = '0px';
-        } else {
-            settings.style.maxHeight = '300px';
-        }
-    };
+btn.onclick = function () {
+    // Checks if the nick is valid.
+    if (validNick()) {
+        nickErrorText.style.opacity = 0;
+        startGame('player');
+    } else {
+        nickErrorText.style.opacity = 1;
+    }
+};
 
     playerNameInput.addEventListener('keypress', function (e) {
         var key = e.which || e.keyCode;
@@ -341,18 +324,6 @@ global.target = target;
 
 window.canvas = new Canvas();
 window.chat = new ChatClient();
-
-var visibleBorderSetting = document.getElementById('visBord');
-visibleBorderSetting.onchange = settings.toggleBorder;
-
-var showMassSetting = document.getElementById('showMass');
-showMassSetting.onchange = settings.toggleMass;
-
-var continuitySetting = document.getElementById('continuity');
-continuitySetting.onchange = settings.toggleContinuity;
-
-var roundFoodSetting = document.getElementById('roundFood');
-roundFoodSetting.onchange = settings.toggleRoundFood;
 
 var c = window.canvas.cv;
 var graph = c.getContext('2d');

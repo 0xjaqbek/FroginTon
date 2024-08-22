@@ -9,6 +9,18 @@
     --tg-theme-secondary_bg_color: rgb(255, 255, 255);
 }
 
+@font-face {
+    font-family: 'Super Frog';
+    src: url('../SuperFrog.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Example usage */
+body, input, button {
+    font-family: 'Super Frog';
+}
+
 html, body {
     background-color: #222;
     overflow: hidden;
@@ -164,7 +176,7 @@ div {
     box-shadow: 0 0 3px 1px #DDDDDD;
 }
 
-#startButton, #spectateButton, #settingsButton {
+#startButton {
     position: relative;
     margin: auto;
     width: 100%;
@@ -186,8 +198,8 @@ div {
     margin-bottom: 10px;
 }
 
-#startButton:active, #spectateButton:active, #settingsButton:active,
-#startButton:hover, #spectateButton:hover, #settingsButton:hover {
+#startButton:active,
+#startButton:hover{
     top: 1px;
     background: #55D88B;
     outline: none;
@@ -195,17 +207,13 @@ div {
     box-shadow: none;
 }
 
-#settings, #startMenuWrapper {
+#startMenuWrapper {
     -webkit-transition: max-height 1s;
     -moz-transition: max-height 1s;
     -ms-transition: max-height 1s;
     -o-transition: max-height 1s;
     transition: max-height 1s;
     overflow: hidden;
-}
-
-#settings {
-    max-height: 0;
 }
 
 #startMenu h3 {
@@ -279,7 +287,7 @@ div {
         font-size: 12px; /* Smaller input font size */
     }
 
-    #startButton, #spectateButton, #settingsButton {
+    #startButton {
         width: 100%; /* Adjust button width for smaller screens */
         height: 35px; /* Adjust button height */
     }
