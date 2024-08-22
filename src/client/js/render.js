@@ -170,7 +170,6 @@ arenaImage.onerror = function() {
 const drawGrid = (global, player, screen, graph) => {
     // Draw the arena image as the background
     if (arenaImage.complete && arenaImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
-        console.log('Drawing arena image...');
 
         let arenaImageWidth;
         let arenaImageHeight;
@@ -198,7 +197,6 @@ const drawGrid = (global, player, screen, graph) => {
 
     // Draw the sponsor image at the top of the screen
     if (sponsorImage.complete && sponsorImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
-        console.log('Drawing sponsor image...');
 
         const sponsorImageWidth = screen.width; // Scale width to 50% of screen width
         const sponsorImageHeight = sponsorImageWidth / sponsorImage.naturalWidth * sponsorImage.naturalHeight; // Maintain aspect ratio
