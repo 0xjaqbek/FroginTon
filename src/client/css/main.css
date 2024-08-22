@@ -4,7 +4,7 @@
 }
 
 :root {
-    --tg-theme-bg-color: #ffee00;
+    --tg-theme-bg-color: #000000;
     --tg-theme-header-bg-color: rgb(255, 255, 255);
     --tg-theme-secondary_bg_color: rgb(255, 255, 255);
 }
@@ -22,7 +22,7 @@ body, input, button {
 }
 
 html, body {
-    background-color: #ffee00;
+    background-color: #000000;
     overflow: hidden;
 }
 
@@ -31,7 +31,7 @@ html, body, canvas {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: rgb(255, 238, 0);
+    background: rgb(0, 0, 0);
 }
 
 div {
@@ -146,7 +146,7 @@ div {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    background-color: rgb(238, 0, 255);
+    background-color: rgb(70, 70, 70);
     box-sizing: border-box;
 }
 
