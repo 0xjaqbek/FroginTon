@@ -391,12 +391,6 @@ const updateSpectator = (socketID) => {
     }
 }
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-
 setInterval(tickGame, 1000 / 60);
 setInterval(gameloop, 1000);
 setInterval(sendUpdates, 1000 / config.networkUpdateFactor);
