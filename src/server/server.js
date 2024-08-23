@@ -6,7 +6,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
     cors: {
-        origin: "https://your-app.herokuapp.com", // Replace with your actual frontend URL
+        origin: "https://frogin-c6b1fb9c40b9.herokuapp.com/", // Replace with your actual frontend URL
         methods: ["GET", "POST"]
     }
 });
