@@ -49,52 +49,56 @@ function validNick() {
 }
 
 window.onload = function () {
-    console.log("Script loaded and running");
+    setTimeout(function() {
+        var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
 
-    var isTelegramWebApp = typeof Telegram !== 'undefined' && Telegram.WebApp;
+        if (isTelegramWebApp) {
+            console.log("Running in Telegram Web App");
+            window.Telegram.WebApp.disableVerticalSwipes();
 
-    if (isTelegramWebApp) {
-        console.log("Running in Telegram Web App");
-        window.Telegram.WebApp.disableVerticalSwipes();
+            Telegram.WebApp.ready();
+            Telegram.WebApp.setHeaderColor('bg_color');
+            console.log("Header color", Telegram.WebApp.setHeaderColor);
+            
+            // Debug: Check the entire initDataUnsafe object
+            console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
 
-        Telegram.WebApp.ready();
-        Telegram.WebApp.setHeaderColor('bg_color');
-        console.log("Header color", Telegram.WebApp.setHeaderColor);
-        // Debug: Check the entire initDataUnsafe object
-        console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
+            // Get user data
+            var user = Telegram.WebApp.initDataUnsafe.user;
 
-        // Get user data
-        var user = Telegram.WebApp.initDataUnsafe.user;
+            // Debug: Check if user data is available
+            console.log("User data:", user);
 
-        // Debug: Check if user data is available
-        console.log("User data:", user);
+            if (user) {
+                var username = user.username || "Unnamed";
+                var userId = user.id;  // Get the user ID
 
-        if (user) {
-            var username = user.username || "Unnamed";
+                console.log("Username: " + username);
+                console.log("User ID: " + userId);
 
-            console.log("Username: " + username);
+                // Set the player name to the obtained Telegram username
+                global.playerName = username;
+                console.log("Player name set to: " + global.playerName);
 
-            // Set the player name to the obtained Telegram username
-            global.playerName = username;
-            console.log("Player name set to: " + global.playerName);
+                // Store user ID in global for use in other parts of your application
+                global.userId = userId;
 
-            // Remove the playerNameInput field from the DOM
-            var playerNameInput = document.getElementById('playerNameInput');
-            if (playerNameInput) {
-                playerNameInput.remove();
-                console.log("playerNameInput field removed.");
+                // Remove the playerNameInput field from the DOM
+                var playerNameInput = document.getElementById('playerNameInput');
+                if (playerNameInput) {
+                    playerNameInput.remove();
+                    console.log("playerNameInput field removed.");
+                }
+
+            } else {
+                console.log("No user data available.");
             }
-
-            // Optionally, start the game automatically
-            // startGame("default");  // Uncomment this line if you want the game to start automatically
-
         } else {
-            console.log("No user data available.");
+            console.log("Not running in Telegram Web App");
         }
-    } else {
-        console.log("Not running in Telegram Web App");
-    }
+    }, 1000);  // Adjust the delay as necessary
 };
+
 
 
 
@@ -343,7 +347,7 @@ function handleDisconnect() {
     const currentMass = player.massTotal || 0;
     const massGained = currentMass - (initialMass || 0);
     console.log(`Mass gained during the game: ${massGained}`);
-    if (!global.kicked) { // We have a more specific error message 
+    if (!global.kicked) {
         render.drawErrorMessage('Disconnected!', graph, global.screen);
     }
 }
@@ -458,8 +462,9 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
-        // Store mass gained in the database
-        storeMassData(massGained, global.playerName, Telegram.WebApp.initDataUnsafe.user.id);
+        // Safeguard: Check if user ID is available
+        const userId = global.userId || 'unknown';
+        storeMassData(massGained, global.playerName, userId);
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
             document.getElementById('gameAreaWrapper').style.opacity = 0;
