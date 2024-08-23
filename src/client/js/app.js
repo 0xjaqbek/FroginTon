@@ -65,10 +65,9 @@ window.onload = function () {
 
         // Get user data
         var user = Telegram.WebApp.initDataUnsafe.user;
-        var userId = user.id || "Unknown ID";  // Attempt to get the user ID, if available
 
-        console.log("Username: " + username);
-        console.log("User ID: " + userId);
+        // Debug: Check if user data is available
+        console.log("User data:", user);
 
         if (user) {
             var username = user.username || "Unnamed";

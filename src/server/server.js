@@ -4,8 +4,7 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http)
-
+const io = require('socket.io')(http);
 const SAT = require('sat');
 
 const gameLogic = require('./game-logic');
@@ -29,86 +28,15 @@ const Vector = SAT.Vector;
 
 app.use(express.static(__dirname + '/../client'));
 
-require('dotenv').config();  // Add this line at the beginning
-process.env.FIREBASE_DEBUG = true;
-const admin = require('firebase-admin');
-
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
-const serviceAccount = {
-    type: 'service_account',
-    project_id: process.env.FIREBASE_PROJECT_ID,  // Ensure this is correctly set
-    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Replace newlines correctly
-    client_email: process.env.FIREBASE_CLIENT_EMAIL,
-    client_id: process.env.FIREBASE_CLIENT_ID,
-    auth_uri: process.env.FIREBASE_AUTH_URI,
-    token_uri: process.env.FIREBASE_TOKEN_URI,
-    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-  };
-  console.log("FIREBASE_PROJECT_ID:", process.env.FIREBASE_PROJECT_ID);
-  console.log("FIREBASE_PRIVATE_KEY_ID:", process.env.FIREBASE_PRIVATE_KEY_ID);
-  console.log("FIREBASE_PRIVATE_KEY:", process.env.FIREBASE_PRIVATE_KEY ? "[PRIVATE_KEY_PRESENT]" : "[PRIVATE_KEY_MISSING]");
-  console.log("FIREBASE_CLIENT_EMAIL:", process.env.FIREBASE_CLIENT_EMAIL);
-  console.log("FIREBASE_CLIENT_ID:", process.env.FIREBASE_CLIENT_ID);
-  console.log("FIREBASE_AUTH_URI:", process.env.FIREBASE_AUTH_URI);
-  console.log("FIREBASE_TOKEN_URI:", process.env.FIREBASE_TOKEN_URI);
-  console.log("FIREBASE_AUTH_PROVIDER_X509_CERT_URL:", process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL);
-  console.log("FIREBASE_CLIENT_X509_CERT_URL:", process.env.FIREBASE_CLIENT_X509_CERT_URL);
-  
-  console.log("Initializing Firebase...");
-
-
-
-  try {
-      admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount),
-          databaseURL: 'https://frogin-485a6-default-rtdb.europe-west1.firebasedatabase.app/'
-      });
-      console.log('Firebase Initialized Successfully');
-  } catch (error) {
-      console.error('Firebase Initialization Failed:', error);
-  }
-
-const db = admin.database();
-
-// Player data update function
-async function updatePlayerData(userId, username, massGained) {
-    try {
-        const playerRef = db.ref('players/' + userId);
-        const snapshot = await playerRef.once('value');
-
-        if (snapshot.exists()) {
-            playerRef.update({
-                mass: snapshot.val().mass + massGained
-            });
-        } else {
-            playerRef.set({
-                username: username,
-                mass: massGained
-            });
-        }
-
-        console.log(`[INFO] Updated player data for ${username} (${userId}): +${massGained} mass.`);
-    } catch (err) {
-        console.error('Error updating player data:', err);
-    }
-}
-
 io.on('connection', function (socket) {
     let type = socket.handshake.query.type;
     console.log('User has connected: ', type);
-    
     switch (type) {
         case 'player':
-            addPlayer(socket);  // Pass the `socket` to `addPlayer`
+            addPlayer(socket);
             break;
         case 'spectator':
-            addSpectator(socket);  // Pass the `socket` to `addSpectator`
+            addSpectator(socket);
             break;
         default:
             console.log('Unknown user type, not doing anything.');
@@ -142,6 +70,7 @@ const addPlayer = (socket) => {
             io.emit('playerJoin', { name: currentPlayer.name });
             console.log('Total players: ' + map.players.data.length);
         }
+
     });
 
     socket.on('pingcheck', () => {
@@ -325,11 +254,6 @@ const tickPlayer = (currentPlayer) => {
         map.food.delete(eatenFoodIndexes);
         map.massFood.remove(eatenMassIndexes);
         massGained += (eatenFoodIndexes.length * config.foodMass);
-        if (massGained > 0) {
-            // Update player's mass and store data in the database
-            currentPlayer.changeCellMass(cellIndex, massGained);
-            updatePlayerData(currentPlayer.id, currentPlayer.name, massGained);
-        }
         currentPlayer.changeCellMass(cellIndex, massGained);
     }
     currentPlayer.virusSplit(cellsToSplit, config.limitSplit, config.defaultPlayerMass);
