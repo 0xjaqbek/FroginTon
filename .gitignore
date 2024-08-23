@@ -4,4 +4,5 @@ npm-debug.log
 client/bower_components
 bin
 .vercel
+.env
 src/client/frogin-485a6-firebase-adminsdk-k3ymh-4849dec6d3.json
