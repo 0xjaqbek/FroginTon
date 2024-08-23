@@ -32,6 +32,9 @@ require('dotenv').config();  // Add this line at the beginning
 
 const admin = require('firebase-admin');
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 const serviceAccount = {
     type: 'service_account',
