@@ -46,6 +46,8 @@ const serviceAccount = {
     client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
   };
   console.log("FIREBASE_PROJECT_ID:", process.env.FIREBASE_PROJECT_ID);
+  console.log(process.env.FIREBASE_PROJECT_ID); // Correct
+console.log(process.env.firebase_project_id); // Incorrect, will be undefined
   console.log("FIREBASE_PRIVATE_KEY_ID:", process.env.FIREBASE_PRIVATE_KEY_ID);
   console.log("FIREBASE_PRIVATE_KEY:", process.env.FIREBASE_PRIVATE_KEY ? "[PRIVATE_KEY_PRESENT]" : "[PRIVATE_KEY_MISSING]");
   console.log("FIREBASE_CLIENT_EMAIL:", process.env.FIREBASE_CLIENT_EMAIL);
