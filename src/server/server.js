@@ -4,12 +4,8 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http, {
-    cors: {
-        origin: "https://frogin-c6b1fb9c40b9.herokuapp.com/", // Replace with your actual frontend URL
-        methods: ["GET", "POST"]
-    }
-});
+const io = require('socket.io')(http)
+
 const SAT = require('sat');
 
 const gameLogic = require('./game-logic');
