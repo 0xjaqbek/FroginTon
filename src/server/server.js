@@ -4,7 +4,12 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+    cors: {
+        origin: "https://your-app.herokuapp.com", // Replace with your actual frontend URL
+        methods: ["GET", "POST"]
+    }
+});
 const SAT = require('sat');
 
 const gameLogic = require('./game-logic');
@@ -60,6 +65,8 @@ const serviceAccount = {
   console.log("FIREBASE_CLIENT_X509_CERT_URL:", process.env.FIREBASE_CLIENT_X509_CERT_URL);
   
   console.log("Initializing Firebase...");
+
+
 
   try {
       admin.initializeApp({
