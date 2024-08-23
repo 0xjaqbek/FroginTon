@@ -32,7 +32,7 @@ require('dotenv').config();  // Add this line at the beginning
 
 const admin = require('firebase-admin');
 
-firebase.database.enableLogging(true);
+
 const serviceAccount = {
   type: 'service_account',
   project_id: "frogin-485a6",
