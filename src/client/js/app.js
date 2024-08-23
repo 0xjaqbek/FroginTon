@@ -372,7 +372,7 @@ function setupSocket(socket) {
         player.cells = player.cells || [];    
         global.player = player;
         window.chat.player = player;
-        initialMass = player.massTotal || 0;
+        initialMass = playerSettings.massTotal || 0; // Initialize initialMass here
         socket.emit('gotit', player);
         global.gameStart = true;
         window.chat.addSystemLine('Connected to the game!');
@@ -458,6 +458,8 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
+        // Store mass gained in the database
+        storeMassData(massGained, global.playerName, Telegram.WebApp.initDataUnsafe.user.id);
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
             document.getElementById('gameAreaWrapper').style.opacity = 0;
@@ -484,6 +486,7 @@ socket.on('playerJoin', (data) => {
         socket.close();
     });
 }
+
 
 const isUnnamedCell = (name) => name.length < 1;
 
