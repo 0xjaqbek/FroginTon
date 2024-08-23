@@ -32,6 +32,7 @@ require('dotenv').config();  // Add this line at the beginning
 
 const admin = require('firebase-admin');
 
+
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
@@ -58,10 +59,17 @@ const serviceAccount = {
   console.log("FIREBASE_AUTH_PROVIDER_X509_CERT_URL:", process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL);
   console.log("FIREBASE_CLIENT_X509_CERT_URL:", process.env.FIREBASE_CLIENT_X509_CERT_URL);
   
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://frogin-485a6-default-rtdb.europe-west1.firebasedatabase.app/'
-});
+  console.log("Initializing Firebase...");
+
+  try {
+      admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+          databaseURL: 'https://frogin-485a6-default-rtdb.europe-west1.firebasedatabase.app/'
+      });
+      console.log('Firebase Initialized Successfully');
+  } catch (error) {
+      console.error('Firebase Initialization Failed:', error);
+  }
 
 const db = admin.database();
 
