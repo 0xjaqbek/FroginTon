@@ -28,40 +28,50 @@ const Vector = SAT.Vector;
 
 app.use(express.static(__dirname + '/../client'));
 
-const { Client } = require('pg');
+// Firebase initialization
+const admin = require('firebase-admin');
+const serviceAccount = require('../client/frogin-485a6-firebase-adminsdk-k3ymh-4849dec6d3.json');
 
-const dbClient = new Client({
-    connectionString: process.env.DATABASE_URL || 'postgres://u3p3v677fohkp1:p37f0915ce1a7ea811353e9d2ae22969cd4954e0ee7e21c2c44be2df0615a9053@c9tiftt16dc3eo.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com:5432/d947ag1v8c59lb',
-    ssl: {
-        rejectUnauthorized: false
-    }
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://frogin-485a6-default-rtdb.europe-west1.firebasedatabase.app/'
 });
 
-dbClient.connect()
-    .then(async () => {
-        console.log('Connected to the database');
+const db = admin.database();
 
-        // Create the players table if it doesn't exist
-        await dbClient.query(`
-            CREATE TABLE IF NOT EXISTS players (
-                user_id BIGINT PRIMARY KEY,
-                username VARCHAR(255),
-                mass NUMERIC
-            );
-        `);
-        console.log('Players table created or already exists.');
-    })
-    .catch(err => console.error('Database connection error:', err.stack));
-    
+// Player data update function
+async function updatePlayerData(userId, username, massGained) {
+    try {
+        const playerRef = db.ref('players/' + userId);
+        const snapshot = await playerRef.once('value');
+
+        if (snapshot.exists()) {
+            playerRef.update({
+                mass: snapshot.val().mass + massGained
+            });
+        } else {
+            playerRef.set({
+                username: username,
+                mass: massGained
+            });
+        }
+
+        console.log(`[INFO] Updated player data for ${username} (${userId}): +${massGained} mass.`);
+    } catch (err) {
+        console.error('Error updating player data:', err);
+    }
+}
+
 io.on('connection', function (socket) {
     let type = socket.handshake.query.type;
     console.log('User has connected: ', type);
+    
     switch (type) {
         case 'player':
-            addPlayer(socket);
+            addPlayer(socket);  // Pass the `socket` to `addPlayer`
             break;
         case 'spectator':
-            addSpectator(socket);
+            addSpectator(socket);  // Pass the `socket` to `addSpectator`
             break;
         default:
             console.log('Unknown user type, not doing anything.');
@@ -95,7 +105,6 @@ const addPlayer = (socket) => {
             io.emit('playerJoin', { name: currentPlayer.name });
             console.log('Total players: ' + map.players.data.length);
         }
-
     });
 
     socket.on('pingcheck', () => {
@@ -323,31 +332,6 @@ const calculateLeaderboard = () => {
                 break;
             }
         }
-    }
-}
-
-async function updatePlayerData(userId, username, massGained) {
-    try {
-        const result = await dbClient.query('SELECT mass FROM players WHERE user_id = $1', [userId]);
-
-        if (result.rows.length > 0) {
-            // If the user already exists, update their mass
-            await dbClient.query(
-                'UPDATE players SET mass = mass + $1 WHERE user_id = $2',
-                [massGained, userId]
-            );
-        } else {
-            // If the user does not exist, insert a new record
-            await dbClient.query(
-                'INSERT INTO players (user_id, username, mass) VALUES ($1, $2, $3)',
-                [userId, username, massGained]
-            );
-        }
-
-        console.log(`[INFO] Updated player data for ${username} (${userId}): +${massGained} mass.`);
-        console.log(`[DEBUG] Data successfully sent to the database for player ${username} (ID: ${userId}) with mass gained: ${massGained}.`);
-    } catch (err) {
-        console.error('Error updating player data:', err);
     }
 }
 
