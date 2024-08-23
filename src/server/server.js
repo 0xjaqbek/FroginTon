@@ -58,7 +58,6 @@ const serviceAccount = {
   console.log("FIREBASE_AUTH_PROVIDER_X509_CERT_URL:", process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL);
   console.log("FIREBASE_CLIENT_X509_CERT_URL:", process.env.FIREBASE_CLIENT_X509_CERT_URL);
   
-
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://frogin-485a6-default-rtdb.europe-west1.firebasedatabase.app/'
