@@ -29,7 +29,7 @@ const Vector = SAT.Vector;
 app.use(express.static(__dirname + '/../client'));
 
 require('dotenv').config();  // Add this line at the beginning
-
+process.env.FIREBASE_DEBUG = true;
 const admin = require('firebase-admin');
 
 
