@@ -37,7 +37,7 @@ const serviceAccount = {
   type: 'service_account',
   project_id: "frogin-485a6",
   private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Ensure newlines are handled correctly
+  private_key: process.env.FIREBASE_PRIVATE_KEY,  // Ensure newlines are handled correctly
   client_email:"firebase-adminsdk-k3ymh@frogin-485a6.iam.gserviceaccount.com",
   client_id: process.env.FIREBASE_CLIENT_ID,
   auth_uri: process.env.FIREBASE_AUTH_URI,
