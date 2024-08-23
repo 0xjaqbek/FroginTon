@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/../client'));
 require('dotenv').config();  // Add this line at the beginning
 
 const admin = require('firebase-admin');
-const firebase = require('firebase/app');
+
 firebase.database.enableLogging(true);
 const serviceAccount = {
   type: 'service_account',
