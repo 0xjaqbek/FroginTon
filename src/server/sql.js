@@ -47,19 +47,6 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CR
           console.log("Created chat_messages table");
         }
       });
-
-      // Create the mass_data table
-      db.run(`CREATE TABLE IF NOT EXISTS mass_data (
-        userId INTEGER PRIMARY KEY,
-        username TEXT,
-        massGained REAL
-      )`, (err) => {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log("Created mass_data table");
-        }
-      });
     });
   }
 });
