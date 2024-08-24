@@ -6,7 +6,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const SAT = require('sat');
-const db = require('./db');
+
 const gameLogic = require('./game-logic');
 const loggingRepositry = require('./repositories/logging-repository');
 const chatRepository = require('./repositories/chat-repository');
@@ -27,15 +27,6 @@ let leaderboardChanged = false;
 const Vector = SAT.Vector;
 
 app.use(express.static(__dirname + '/../client'));
-app.get('/getMassData', async (req, res) => {
-    try {
-        const massData = await db.all('SELECT userId, username, massGained FROM mass_data');
-        res.json(massData); // Send the data as JSON
-    } catch (error) {
-        console.error('Error fetching mass data:', error);
-        res.status(500).json({ error: 'Error fetching mass data' });
-    }
-});
 
 io.on('connection', function (socket) {
     let type = socket.handshake.query.type;
@@ -57,12 +48,12 @@ function generateSpawnpoint() {
     return getPosition(config.newPlayerInitialPosition === 'farthest', radius, map.players.data)
 }
 
+
 const addPlayer = (socket) => {
     var currentPlayer = new mapUtils.playerUtils.Player(socket.id);
-    let initialMass = 0; // Declare initialMass here
+
     socket.on('gotit', function (clientPlayerData) {
         console.log('[INFO] Player ' + clientPlayerData.name + ' connecting!');
-        initialMass = clientPlayerData.massTotal || 0; // Initialize initialMass here
         currentPlayer.init(generateSpawnpoint(), config.defaultPlayerMass);
 
         if (map.players.findIndexByID(socket.id) > -1) {
@@ -79,7 +70,7 @@ const addPlayer = (socket) => {
             io.emit('playerJoin', { name: currentPlayer.name });
             console.log('Total players: ' + map.players.data.length);
         }
-        initialMass = clientPlayerData.massTotal || 0; // Initialize initialMass here
+
     });
 
     socket.on('pingcheck', () => {
@@ -104,32 +95,7 @@ const addPlayer = (socket) => {
         map.players.removePlayerByID(currentPlayer.id);
         console.log('[INFO] User ' + currentPlayer.name + ' has disconnected');
         socket.broadcast.emit('playerDisconnect', { name: currentPlayer.name });
-            // Calculate mass gained
-    const currentMass = currentPlayer.massTotal || 0;
-    const massGained = currentMass - initialMass;
-
-    // Store mass gained in the database
-    storeMassData(massGained, currentPlayer.name, currentPlayer.userId);
-
-    // Log the disconnect event
-    console.log(`User ${currentPlayer.name} disconnected.`); 
-});
-
-// Function to store mass data in the database
-async function storeMassData(massGained, playerName, userId) {
-    try {
-        // Insert the mass data into the database
-        await db.run(`INSERT INTO mass_data (userId, username, massGained) VALUES (?, ?, ?)`, [userId, playerName, massGained]);
-
-        // Log the data sent to the database
-        console.log(`Mass data stored for user ${userId} (${playerName}): ${massGained}`);
-
-        // Log that data was sent to the mass_data table
-        console.log(`Data sent to mass_data table for user ${userId} (${playerName})`); 
-    } catch (error) {
-        console.error('Error storing mass data:', error);
-    }
-}
+    });
 
     socket.on('playerChat', (data) => {
         var _sender = data.sender.replace(/(<([^>]+)>)/ig, '');
