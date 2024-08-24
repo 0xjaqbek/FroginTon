@@ -42,7 +42,6 @@
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
             <a onclick="document.getElementById('spawn_cell').play(); document.getElementById('playerNameInput').focus();"><button id="startButton">Play</button></a>
-            <button id="massButton">Mass</button> <div id="massData"></div>
             <div id="instructions">
                 <h3>Gameplay</h3>
                 <ul>
@@ -57,50 +56,4 @@
     <!-- JS -->
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
-    <script>
-                // Add an event listener to the "Mass" button
-                document.getElementById('massButton').addEventListener('click', function() {
-            // Fetch mass data from the database (replace with your actual API call)
-            fetch('/getMassData')
-    .then(response => response.json())
-    .then(data => {
-        // Handle the data as a single object
-        let massDataDiv = document.getElementById('massData');
-        massDataDiv.innerHTML = ''; // Clear previous data
-
-        if (data.length === 0) {
-            massDataDiv.innerHTML = '<p>No mass data found.</p>';
-        } else {
-            let table = document.createElement('table');
-            let headerRow = table.insertRow();
-            let userIdHeader = headerRow.insertCell();
-            let usernameHeader = headerRow.insertCell();
-            let massGainedHeader = headerRow.insertCell();
-
-            userIdHeader.textContent = 'User ID';
-            usernameHeader.textContent = 'Username';
-            massGainedHeader.textContent = 'Mass Gained';
-
-            // Assuming data is an object with userId, username, and massGained properties
-            let row = table.insertRow();
-            let userIdCell = row.insertCell();
-            let usernameCell = row.insertCell();
-            let massGainedCell = row.insertCell();
-
-            userIdCell.textContent = data.userId;
-            usernameCell.textContent = data.username;
-            massGainedCell.textContent = data.massGained;
-
-            massDataDiv.appendChild(table);
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching mass data:', error);
-        let massDataDiv = document.getElementById('massData');
-        massDataDiv.innerHTML = '<p>Error fetching mass data.</p>';
-    });
-
-        });
-    </script>
-</body>
 </html>
