@@ -140,29 +140,23 @@ const playerId = global.playerId || 'defaultPlayerId'; // Replace 'defaultPlayer
 
 // Event listener for the retrieve data button
 document.getElementById('retrieveDataButton').addEventListener('click', () => {
-    const playerId = global.playerId; // Ensure playerId is set correctly
-    if (!playerId) {
-        console.error('Player ID is not defined!');
-        return;
-    }
+    const playersRef = firebase.database().ref('players');
 
-    const dataRef = firebase.database().ref(`players/${playerId}`);
-    
-    dataRef.once('value')
+    playersRef.once('value')
         .then((snapshot) => {
-            const data = snapshot.val();
-            console.log('Data retrieved:', data);
+            const playersData = snapshot.val();
+            console.log('All players data retrieved:', playersData);
 
             // Open a new window
             const newWindow = window.open('', '_blank');
             if (newWindow) {
                 // Create table HTML
-                const tableHTML = `
+                let tableHTML = `
                     <!doctype html>
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <title>Mass Data</title>
+                        <title>All Players Mass Data</title>
                         <style>
                             table {
                                 width: 100%;
@@ -179,7 +173,7 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                         </style>
                     </head>
                     <body>
-                        <h1>Player Mass Data</h1>
+                        <h1>All Players Mass Data</h1>
                         <table>
                             <thead>
                                 <tr>
@@ -188,17 +182,24 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                                     <th>Timestamp</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>${data.playerName || 'Unknown'}</td>
-                                    <td>${data.mass || 'N/A'}</td>
-                                    <td>${new Date(data.timestamp).toLocaleString() || 'N/A'}</td>
-                                </tr>
+                            <tbody>`;
+
+                // Loop through each player and add a row to the table
+                for (let playerId in playersData) {
+                    const player = playersData[playerId];
+                    tableHTML += `
+                        <tr>
+                            <td>${player.playerName || 'Unknown'}</td>
+                            <td>${player.mass || 'N/A'}</td>
+                            <td>${new Date(player.timestamp).toLocaleString() || 'N/A'}</td>
+                        </tr>`;
+                }
+
+                tableHTML += `
                             </tbody>
                         </table>
                     </body>
-                    </html>
-                `;
+                    </html>`;
 
                 // Write the table HTML to the new window
                 newWindow.document.write(tableHTML);
@@ -211,6 +212,7 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             console.error('Error fetching data:', error);
         });
 });
+
 
 
 var btn = document.getElementById('startButton');
