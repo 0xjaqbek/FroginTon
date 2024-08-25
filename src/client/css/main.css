@@ -385,3 +385,11 @@ input[type="image"]:focus {
     text-decoration: none;
     cursor: pointer;
 }
+
+.modal-hidden {
+    display: none;
+}
+
+.modal-visible {
+    display: block;
+}

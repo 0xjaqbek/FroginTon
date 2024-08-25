@@ -138,8 +138,12 @@ var firebaseConfig = {
 // Ensure `playerId` is defined globally or set before this code is executed
 const playerId = global.playerId || 'defaultPlayerId'; // Replace 'defaultPlayerId' with a fallback if needed
 
-// Event listener for the retrieve data button
+// Show the modal and fetch player data
 document.getElementById('retrieveDataButton').addEventListener('click', () => {
+    const modal = document.getElementById('playersModal');
+    modal.classList.remove('modal-hidden');
+    modal.classList.add('modal-visible');
+
     const playersRef = firebase.database().ref('players');
 
     playersRef.once('value')
@@ -147,13 +151,9 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             const playersData = snapshot.val();
             console.log('All players data retrieved:', playersData);
 
-            // Get the container element
             const container = document.getElementById('playersDataContainer');
-            
-            // Clear any existing content
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clear existing content
 
-            // Create table HTML
             let tableHTML = `
                 <table>
                     <thead>
@@ -166,7 +166,6 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                     </thead>
                     <tbody>`;
 
-            // Loop through each player and add a row to the table
             for (let playerId in playersData) {
                 const player = playersData[playerId];
                 tableHTML += `
@@ -182,30 +181,29 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                     </tbody>
                 </table>`;
 
-            // Insert the table HTML into the container
-            container.innerHTML = tableHTML;
-
-            // Display the modal
-            document.getElementById('playersModal').style.display = 'block';
+            container.innerHTML = tableHTML; // Insert the table HTML into the container
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
 });
 
-
-// Event listener for closing the modal
+// Hide the modal when clicking the close button
 document.getElementById('closeModalButton').addEventListener('click', () => {
-    document.getElementById('playersModal').style.display = 'none';
+    const modal = document.getElementById('playersModal');
+    modal.classList.remove('modal-visible');
+    modal.classList.add('modal-hidden');
 });
 
 // Close the modal when clicking outside of it
 window.addEventListener('click', (event) => {
     const modal = document.getElementById('playersModal');
     if (event.target === modal) {
-        modal.style.display = 'none';
+        modal.classList.remove('modal-visible');
+        modal.classList.add('modal-hidden');
     }
 });
+
 
 
 
