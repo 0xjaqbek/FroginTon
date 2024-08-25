@@ -41,7 +41,25 @@
             <input type="text" tabindex="0" placeholder="Enter your name here" id="playerNameInput" maxlength="25" />
             <b class="input-error">Nick must be alphanumeric characters only!</b>
             <br />
-            <a onclick="document.getElementById('spawn_cell').play(); document.getElementById('playerNameInput').focus();"><button id="startButton">Play</button></a>
+            <a onclick="document.getElementById('spawn_cell').play(); document.getElementById('playerNameInput').focus();">
+                <button id="startButton">Play</button>
+            </a>
+            <!-- Mass Button -->
+            <a><button id="retrieveDataButton" style="margin-top: 10px;">Mass</button></a>
+                        <!-- Table Container (Initially Hidden) -->
+                        <div id="massTable" style="display: none; margin-top: 10px;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Player Name</th>
+                                        <th>Mass</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="massTableBody">
+                                    </tbody>
+                            </table>
+                        </div>
             <div id="instructions">
                 <h3>Gameplay</h3>
                 <ul>
@@ -53,9 +71,41 @@
             </div>
         </div>
     </div>
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <!-- JS -->
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
+
+    <!-- Event Handler -->
+    <script>
+    // Assuming you have a button with the ID "retrieveDataButton"
+    const retrieveDataButton = document.getElementById('retrieveDataButton');
+
+    // Add an event listener to the button
+    retrieveDataButton.addEventListener('click', () => {
+        // Get a reference to the Firebase Realtime Database
+        const database = firebase.database();
+
+        // Define the path to the data you want to retrieve
+        const dataRef = database.ref(`players/${playerId}`); // Replace with your actual path
+
+        // Read the data from the database
+        dataRef.once('value', (snapshot) => {
+            // Handle the data
+            const data = snapshot.val();
+
+            // Do something with the retrieved data
+            console.log(data); // Log the data to the console
+
+            // Example: Update a UI element with the data
+            const dataElement = document.getElementById('dataElement');
+            if (dataElement) {
+                dataElement.textContent = JSON.stringify(data, null, 2); // Format data as JSON string
+            }
+        });
+    });
+    </script>
+</body>
 </html>
