@@ -81,11 +81,11 @@ window.onload = function () {
             console.log("Username: " + username);
             console.log("User ID: " + userId);
 
-            // Define playerName and playerId at the correct scope
-            window.playerName = username;
-            window.playerId = userId;  // Store the user ID
-            console.log("Player name set to: " + window.playerName);
-            console.log("Player ID set to: " + window.playerId);
+            // Set the player name to the obtained Telegram username
+            global.playerName = username;
+            global.userId = playerId;  // Optionally, store the user ID
+            console.log("Player name set to: " + global.playerName);
+            console.log("Player ID set to: " + global.playerId);
 
             // Remove the playerNameInput field from the DOM
             var playerNameInput = document.getElementById('playerNameInput');
@@ -104,7 +104,6 @@ window.onload = function () {
         console.log("Not running in Telegram Web App");
     }
 };
-
 
 
 // Firebase configuration
