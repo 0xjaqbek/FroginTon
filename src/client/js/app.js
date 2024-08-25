@@ -458,6 +458,9 @@ function handleDisconnect() {
     const currentMass = player.massTotal || 0;
     const massGained = currentMass - (initialMass || 0);
     console.log(`Mass gained during the game: ${massGained}`);
+        // Safeguard: Check if user ID is available
+        const userId = global.playerId || 'unknown';
+        storeMassData(massGained, global.playerName, userId);
     if (!global.kicked) { // We have a more specific error message 
         render.drawErrorMessage('Disconnected!', graph, global.screen);
     }
