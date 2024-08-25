@@ -351,6 +351,7 @@ input[type="image"]:focus {
 
 /* Modal styles */
 .modal {
+    color: #000000;
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
