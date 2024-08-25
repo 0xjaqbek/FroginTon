@@ -123,13 +123,23 @@ var firebaseConfig = {
   // Get a reference to the database service
   var database = firebase.database();
 
-  function storeMassData(massGained, playerName, userId) {
-    var massData = {
-        massGained: massGained,
-        playerName: playerName,
-        userId: playerId,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-    };
+  function storeMassData(massGained, playerName, playerId) {
+    // Create a reference to the player's document using their ID
+    const playerRef = firebase.database().ref(`players/${playerId}`);
+  
+    // Update the player's mass data
+    playerRef.update({
+      massGained: massGained,
+      playerName: playerName,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    })
+    .then(() => {
+      console.log(`Mass data for player ${playerId} updated successfully.`);
+    })
+    .catch((error) => {
+      console.error(`Error updating mass data for player ${playerId}:`, error);
+    });
+  
 
     // Push the mass data to Firebase
     database.ref('massGainedData').push(massData)
