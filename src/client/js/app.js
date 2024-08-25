@@ -7,7 +7,7 @@ var global = require('./global');
 let position = { x: 0, y: 0 };
 var playerNameInput = document.getElementById('playerNameInput');
 var socket;
-let initialMass = 0;
+
 var debug = function (args) {
     if (console && console.log) {
         console.log(args);
@@ -147,70 +147,61 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             const playersData = snapshot.val();
             console.log('All players data retrieved:', playersData);
 
-            // Open a new window
-            const newWindow = window.open('', '_blank');
-            if (newWindow) {
-                // Create table HTML
-                let tableHTML = `
-                    <!doctype html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>All Players Mass Data</title>
-                        <style>
-                            table {
-                                width: 100%;
-                                border-collapse: collapse;
-                            }
-                            th, td {
-                                border: 1px solid #ddd;
-                                padding: 8px;
-                                text-align: left;
-                            }
-                            th {
-                                background-color: #f2f2f2;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>All Players Mass Data</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Player Name</th>
-                                    <th>Mass</th>
-                                    <th>Timestamp</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
+            // Get the container element
+            const container = document.getElementById('playersDataContainer');
+            
+            // Clear any existing content
+            container.innerHTML = '';
 
-                // Loop through each player and add a row to the table
-                for (let playerId in playersData) {
-                    const player = playersData[playerId];
-                    tableHTML += `
+            // Create table HTML
+            let tableHTML = `
+                <table>
+                    <thead>
                         <tr>
-                            <td>${player.playerName || 'Unknown'}</td>
-                            <td>${player.mass || 'N/A'}</td>
-                            <td>${new Date(player.timestamp).toLocaleString() || 'N/A'}</td>
-                        </tr>`;
-                }
+                            <th>Player Name</th>
+                            <th>Mass</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
 
+            // Loop through each player and add a row to the table
+            for (let playerId in playersData) {
+                const player = playersData[playerId];
                 tableHTML += `
-                            </tbody>
-                        </table>
-                    </body>
-                    </html>`;
-
-                // Write the table HTML to the new window
-                newWindow.document.write(tableHTML);
-                newWindow.document.close(); // Close the document to complete writing
-            } else {
-                console.error('Failed to open new window.');
+                    <tr>
+                        <td>${player.playerName || 'Unknown'}</td>
+                        <td>${player.mass || 'N/A'}</td>
+                        <td>${new Date(player.timestamp).toLocaleString() || 'N/A'}</td>
+                    </tr>`;
             }
+
+            tableHTML += `
+                    </tbody>
+                </table>`;
+
+            // Insert the table HTML into the container
+            container.innerHTML = tableHTML;
+
+            // Display the modal
+            document.getElementById('playersModal').style.display = 'block';
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
+});
+
+// Event listener for closing the modal
+document.getElementById('closeModalButton').addEventListener('click', () => {
+    document.getElementById('playersModal').style.display = 'none';
+});
+
+// Close the modal when clicking outside of it
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('playersModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
 });
 
 

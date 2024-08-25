@@ -46,20 +46,14 @@
             </a>
             <!-- Mass Button -->
             <a><button id="retrieveDataButton" style="margin-top: 10px;">Mass</button></a>
-                        <!-- Table Container (Initially Hidden) -->
-                        <div id="massTable" style="display: none; margin-top: 10px;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Player Name</th>
-                                        <th>Mass</th>
-                                        <th>Timestamp</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="massTableBody">
-                                    </tbody>
-                            </table>
-                        </div>
+<!-- Modal HTML -->
+<div id="playersModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" id="closeModalButton">&times;</span>
+        <h1>All Players Mass Data</h1>
+        <div id="playersDataContainer"></div>
+    </div>
+</div>
             <div id="instructions">
                 <h3>Gameplay</h3>
                 <ul>
