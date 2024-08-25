@@ -127,7 +127,7 @@ var firebaseConfig = {
     var massData = {
         massGained: massGained,
         playerName: playerName,
-        userId: userId,
+        userId: playerId,
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };
 
