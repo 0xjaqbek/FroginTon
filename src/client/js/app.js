@@ -606,24 +606,6 @@ socket.on('playerJoin', (data) => {
     });
 }
 
-window.addEventListener('beforeunload', function (e) {
-    const currentMass = player.massTotal || 0;
-    const massGained = currentMass - (initialMass || 0);
-    const playerId = global.playerId || 'unknown';
-
-    // Send the data using navigator.sendBeacon
-    const data = new FormData();
-    data.append('massGained', massGained);
-    data.append('playerName', global.playerName);
-    data.append('playerId', playerId);
-
-    navigator.sendBeacon('/updateMassData', data);  // Assuming '/updateMassData' is your endpoint
-
-    // Optional: Customize the message shown in the prompt (not supported in all browsers)
-    e.preventDefault(); // Standard
-    e.returnValue = ''; // For some browsers
-});
-
 const isUnnamedCell = (name) => name.length < 1;
 
 const getPosition = (entity, player, screen) => {
