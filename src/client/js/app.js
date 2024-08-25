@@ -606,6 +606,19 @@ socket.on('playerJoin', (data) => {
     });
 }
 
+window.addEventListener('beforeunload', function (e) {
+    // Save mass data before the window is unloaded
+    const currentMass = player.massTotal || 0;
+    const massGained = currentMass - (initialMass || 0);
+    const playerId = global.playerId || 'unknown';
+
+    storeMassData(massGained, global.playerName, playerId);
+
+    // Optional: Customize the message shown in the prompt (not supported in all browsers)
+    e.preventDefault(); // Standard
+    e.returnValue = ''; // For some browsers
+});
+
 const isUnnamedCell = (name) => name.length < 1;
 
 const getPosition = (entity, player, screen) => {
