@@ -18,6 +18,43 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
     global.mobile = true;
 }
 
+// Firebase configuration
+var firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  
+  // Get a reference to the database service
+  var database = firebase.database();
+
+  function storeMassData(massGained, playerName, userId) {
+    var massData = {
+        massGained: massGained,
+        playerName: playerName,
+        userId: userId,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    // Push the mass data to Firebase
+    database.ref('massGainedData').push(massData)
+        .then(() => {
+            console.log("Mass data successfully stored in Firebase");
+        })
+        .catch((error) => {
+            console.error("Error storing mass data in Firebase: ", error);
+        });
+}
+
+
+
 function startGame(type) {
     global.playerName = global.playerName || playerNameInput.value.replace(/(<([^>]+)>)/ig, '').substring(0, 25);
     global.playerType = type;
@@ -458,6 +495,9 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
+            // Safeguard: Check if user ID is available
+    const userId = global.userId || 'unknown';
+    storeMassData(massGained, global.playerName, userId);
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
             document.getElementById('gameAreaWrapper').style.opacity = 0;
@@ -475,6 +515,9 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
+            // Safeguard: Check if user ID is available
+    const userId = global.userId || 'unknown';
+    storeMassData(massGained, global.playerName, userId);
         if (reason !== '') {
             render.drawErrorMessage('You were kicked for: ' + reason, graph, global.screen);
         }
