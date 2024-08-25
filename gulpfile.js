@@ -12,7 +12,7 @@ const path = require("path");
 const PluginError = require('plugin-error');
 
 function getWebpackConfig() {
-    return require('./webpack.config.js')(!process.env.IS_DEV)
+    return require('./webpack.config.js')(!process.env.IS_DEV);
 }
 
 function runServer(done) {
