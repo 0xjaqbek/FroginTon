@@ -158,6 +158,7 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                 <table>
                     <thead>
                         <tr>
+                            <th>Player ID</th>
                             <th>Player Name</th>
                             <th>Mass</th>
                             <th>Timestamp</th>
@@ -170,9 +171,10 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                 const player = playersData[playerId];
                 tableHTML += `
                     <tr>
+                        <td>${playerId}</td>
                         <td>${player.playerName || 'Unknown'}</td>
                         <td>${player.mass || 'N/A'}</td>
-                        <td>${new Date(player.timestamp).toLocaleString() || 'N/A'}</td>
+                        <td>${player.timestamp ? new Date(player.timestamp).toLocaleString() : 'N/A'}</td>
                     </tr>`;
             }
 
@@ -190,6 +192,7 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             console.error('Error fetching data:', error);
         });
 });
+
 
 // Event listener for closing the modal
 document.getElementById('closeModalButton').addEventListener('click', () => {
