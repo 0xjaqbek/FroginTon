@@ -5,7 +5,7 @@ module.exports = {
     foodMass: 1,
     fireFood: 20,
     limitSplit: 16,
-    defaultPlayerMass: 0,
+    defaultPlayerMass: 10,
 	virus: {
         fill: "#33ff33",
         stroke: "#19D119",
