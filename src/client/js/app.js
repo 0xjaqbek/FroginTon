@@ -135,36 +135,33 @@ var firebaseConfig = {
     });
 }
   
+// Ensure `playerId` is defined globally or set before this code is executed
+const playerId = global.playerId || 'defaultPlayerId'; // Replace 'defaultPlayerId' with a fallback if needed
+
 // Event listener for the retrieve data button
 document.getElementById('retrieveDataButton').addEventListener('click', () => {
-    // Ensure playerId is defined
     if (!playerId) {
         console.error('Player ID is not defined!');
         return;
     }
 
     // Get a reference to the Firebase Realtime Database
-    const database = firebase.database();
-
-    // Define the path to the data you want to retrieve
-    const dataRef = database.ref(`players/${playerId}`); // Replace with your actual path
+    const dataRef = firebase.database().ref(`players/${playerId}`);
 
     // Read the data from the database
     dataRef.once('value', (snapshot) => {
-        // Handle the data
         const data = snapshot.val();
 
-        // Do something with the retrieved data
-        console.log(data); // Log the data to the console
+        // Log the data to the console
+        console.log(data);
 
-        // Example: Update a UI element with the data
+        // Update a UI element with the data
         const dataElement = document.getElementById('dataElement');
         if (dataElement) {
             dataElement.textContent = JSON.stringify(data, null, 2); // Format data as JSON string
         }
     });
 });
-
 
 var btn = document.getElementById('startButton');
 var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
