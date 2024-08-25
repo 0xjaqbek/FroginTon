@@ -77,36 +77,5 @@
     <!-- JS -->
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
-    
-    <!-- Event Handler -->
-    <script>
-        let playerId = null;
-    // Assuming you have a button with the ID "retrieveDataButton"
-    const retrieveDataButton = document.getElementById('retrieveDataButton');
-
-    // Add an event listener to the button
-    retrieveDataButton.addEventListener('click', () => {
-        // Get a reference to the Firebase Realtime Database
-        const database = firebase.database();
-
-        // Define the path to the data you want to retrieve
-        const dataRef = database.ref(`players/${playerId}`); // Replace with your actual path
-
-        // Read the data from the database
-        dataRef.once('value', (snapshot) => {
-            // Handle the data
-            const data = snapshot.val();
-
-            // Do something with the retrieved data
-            console.log(data); // Log the data to the console
-
-            // Example: Update a UI element with the data
-            const dataElement = document.getElementById('dataElement');
-            if (dataElement) {
-                dataElement.textContent = JSON.stringify(data, null, 2); // Format data as JSON string
-            }
-        });
-    });
-    </script>
 </body>
 </html>
