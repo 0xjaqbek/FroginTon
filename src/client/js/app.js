@@ -458,9 +458,7 @@ function handleDisconnect() {
     const currentMass = player.massTotal || 0;
     const massGained = currentMass - (initialMass || 0);
     console.log(`Mass gained during the game: ${massGained}`);
-        // Safeguard: Check if user ID is available
-        const userId = global.playerId || 'unknown';
-        storeMassData(massGained, global.playerName, userId);
+
     if (!global.kicked) { // We have a more specific error message 
         render.drawErrorMessage('Disconnected!', graph, global.screen);
     }
@@ -553,11 +551,18 @@ socket.on('playerJoin', (data) => {
     // Handle movement.
     socket.on('serverTellPlayerMove', function (playerData, userData, foodsList, massList, virusList) {
         if (global.playerType == 'player') {
-     // Check if player gained mass
-        if (playerData.massTotal > player.massTotal) {
-            isAnimating = true;
-            animationStartTime = Date.now();
-        }
+            if (playerData.massTotal > player.massTotal) {
+                isAnimating = true;
+                animationStartTime = Date.now();
+    
+                // Check for significant mass gain
+                const massGained = playerData.massTotal - player.massTotal;
+                if (massGained >= 10) {  // Adjust this threshold as needed
+                    const userId = global.playerId || 'unknown';
+                    storeMassData(massGained, global.playerName, userId);
+                }
+            }
+    
             player.x = playerData.x;
             player.y = playerData.y;
             player.hue = playerData.hue;
@@ -569,6 +574,7 @@ socket.on('playerJoin', (data) => {
         viruses = virusList;
         fireFood = massList;
     });
+    
 
     // Death.
     socket.on('RIP', function () {
@@ -576,9 +582,7 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
-            // Safeguard: Check if user ID is available
-    const userId = global.playerId || 'unknown';
-    storeMassData(massGained, global.playerName, userId);
+
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
             document.getElementById('gameAreaWrapper').style.opacity = 0;
@@ -596,9 +600,7 @@ socket.on('playerJoin', (data) => {
         const currentMass = player.massTotal || 0;
         const massGained = currentMass - (initialMass || 0);
         console.log(`Mass gained during the game: ${massGained}`);
-            // Safeguard: Check if user ID is available
-    const userId = global.playerId || 'unknown';
-    storeMassData(massGained, global.playerName, userId);
+
         if (reason !== '') {
             render.drawErrorMessage('You were kicked for: ' + reason, graph, global.screen);
         }
