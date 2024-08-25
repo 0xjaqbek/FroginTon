@@ -139,29 +139,56 @@ var firebaseConfig = {
 const playerId = global.playerId || 'defaultPlayerId'; // Replace 'defaultPlayerId' with a fallback if needed
 
 // Event listener for the retrieve data button
+// Event listener for the retrieve data button
 document.getElementById('retrieveDataButton').addEventListener('click', () => {
+    const playerId = global.playerId; // Ensure playerId is set correctly
     if (!playerId) {
         console.error('Player ID is not defined!');
         return;
     }
 
-    // Get a reference to the Firebase Realtime Database
     const dataRef = firebase.database().ref(`players/${playerId}`);
+    
+    dataRef.once('value')
+        .then((snapshot) => {
+            const data = snapshot.val();
+            console.log('Data retrieved:', data);
 
-    // Read the data from the database
-    dataRef.once('value', (snapshot) => {
-        const data = snapshot.val();
+            const massTable = document.getElementById('massTable');
+            const massTableBody = document.getElementById('massTableBody');
 
-        // Log the data to the console
-        console.log(data);
+            if (massTable && massTableBody) {
+                // Show the table
+                massTable.style.display = 'block';
 
-        // Update a UI element with the data
-        const dataElement = document.getElementById('dataElement');
-        if (dataElement) {
-            dataElement.textContent = JSON.stringify(data, null, 2); // Format data as JSON string
-        }
-    });
+                // Clear existing table rows
+                massTableBody.innerHTML = '';
+
+                // Assume `data` is an array of objects
+                if (Array.isArray(data)) {
+                    data.forEach(item => {
+                        // Create a new row
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.playerName || 'Unknown'}</td>
+                            <td>${item.mass || 'N/A'}</td>
+                            <td>${item.timestamp || 'N/A'}</td>
+                        `;
+                        // Append the new row to the table body
+                        massTableBody.appendChild(row);
+                    });
+                } else {
+                    console.error('Data is not an array.');
+                }
+            } else {
+                console.error('Table elements not found.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
 });
+
 
 var btn = document.getElementById('startButton');
 var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
