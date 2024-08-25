@@ -312,7 +312,7 @@ function drawPlayerImage(position, graph, cell) {
 
     // Position the text to the right of the cell
     graph.fillText(
-        Math.round(cell.mass), 
+        Math.max(0, Math.round(cell.mass) - 10), 
         position.x,
         position.y + imageSize / 2 + 10,  // Adjust the offset as needed
     );
