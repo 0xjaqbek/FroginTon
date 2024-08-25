@@ -316,6 +316,11 @@ div {
         height: 35px; /* Adjust button height */
     }
 
+    #retrieveDataButton {
+        width: 100%; /* Adjust button width for smaller screens */
+        height: 35px; /* Adjust button height */
+    }
+
     #status {
         font-size: 14px; /* Smaller font size for status */
         top: 50px; /* Adjust position */
