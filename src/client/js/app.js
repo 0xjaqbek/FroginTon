@@ -120,7 +120,7 @@ var firebaseConfig = {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   
-  function storeMassData(massChange, playerName, playerId) {
+  function storeMassData(massChange, playerName, playerId) { // Add playerId as an argument
     const playerRef = firebase.database().ref(`players/${playerId}`);
     playerRef.update({
       mass: firebase.database.ServerValue.increment(massChange), // Update total mass
