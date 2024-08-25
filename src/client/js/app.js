@@ -18,40 +18,7 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
     global.mobile = true;
 }
 
-// Firebase configuration
-var firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID
-  };
-  
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  
-  // Get a reference to the database service
-  var database = firebase.database();
 
-  function storeMassData(massGained, playerName, userId) {
-    var massData = {
-        massGained: massGained,
-        playerName: playerName,
-        userId: userId,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-    };
-
-    // Push the mass data to Firebase
-    database.ref('massGainedData').push(massData)
-        .then(() => {
-            console.log("Mass data successfully stored in Firebase");
-        })
-        .catch((error) => {
-            console.error("Error storing mass data in Firebase: ", error);
-        });
-}
 
 
 
@@ -133,7 +100,40 @@ window.onload = function () {
     }
 };
 
+// Firebase configuration
+var firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  
+  // Get a reference to the database service
+  var database = firebase.database();
 
+  function storeMassData(massGained, playerName, userId) {
+    var massData = {
+        massGained: massGained,
+        playerName: playerName,
+        userId: userId,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    // Push the mass data to Firebase
+    database.ref('massGainedData').push(massData)
+        .then(() => {
+            console.log("Mass data successfully stored in Firebase");
+        })
+        .catch((error) => {
+            console.error("Error storing mass data in Firebase: ", error);
+        });
+}
 
 var btn = document.getElementById('startButton');
 var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
