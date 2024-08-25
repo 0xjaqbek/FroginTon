@@ -83,7 +83,7 @@ window.onload = function () {
 
             // Set the player name to the obtained Telegram username
             global.playerName = username;
-            global.userId = userId;  // Optionally, store the user ID
+            global.userId = playerId;  // Optionally, store the user ID
             console.log("Player name set to: " + global.playerName);
             console.log("Player ID set to: " + global.playerId);
 
