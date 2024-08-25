@@ -139,7 +139,6 @@ var firebaseConfig = {
 const playerId = global.playerId || 'defaultPlayerId'; // Replace 'defaultPlayerId' with a fallback if needed
 
 // Event listener for the retrieve data button
-// Event listener for the retrieve data button
 document.getElementById('retrieveDataButton').addEventListener('click', () => {
     const playerId = global.playerId; // Ensure playerId is set correctly
     if (!playerId) {
@@ -164,21 +163,19 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                 // Clear existing table rows
                 massTableBody.innerHTML = '';
 
-                // Assume `data` is an array of objects
-                if (Array.isArray(data)) {
-                    data.forEach(item => {
-                        // Create a new row
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${item.playerName || 'Unknown'}</td>
-                            <td>${item.mass || 'N/A'}</td>
-                            <td>${item.timestamp || 'N/A'}</td>
-                        `;
-                        // Append the new row to the table body
-                        massTableBody.appendChild(row);
-                    });
+                // Check if data is available
+                if (data) {
+                    // Create a new row
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${data.playerName || 'Unknown'}</td>
+                        <td>${data.mass || 'N/A'}</td>
+                        <td>${new Date(data.timestamp).toLocaleString() || 'N/A'}</td>
+                    `;
+                    // Append the new row to the table body
+                    massTableBody.appendChild(row);
                 } else {
-                    console.error('Data is not an array.');
+                    console.error('No data found for this player.');
                 }
             } else {
                 console.error('Table elements not found.');
@@ -188,7 +185,6 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             console.error('Error fetching data:', error);
         });
 });
-
 
 var btn = document.getElementById('startButton');
 var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
