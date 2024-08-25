@@ -153,38 +153,65 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             const data = snapshot.val();
             console.log('Data retrieved:', data);
 
-            const massTable = document.getElementById('massTable');
-            const massTableBody = document.getElementById('massTableBody');
+            // Open a new window
+            const newWindow = window.open('', '_blank');
+            if (newWindow) {
+                // Create table HTML
+                const tableHTML = `
+                    <!doctype html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Mass Data</title>
+                        <style>
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                            }
+                            th, td {
+                                border: 1px solid #ddd;
+                                padding: 8px;
+                                text-align: left;
+                            }
+                            th {
+                                background-color: #f2f2f2;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Player Mass Data</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Player Name</th>
+                                    <th>Mass</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${data.playerName || 'Unknown'}</td>
+                                    <td>${data.mass || 'N/A'}</td>
+                                    <td>${new Date(data.timestamp).toLocaleString() || 'N/A'}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </body>
+                    </html>
+                `;
 
-            if (massTable && massTableBody) {
-                // Show the table
-                massTable.style.display = 'block';
-
-                // Clear existing table rows
-                massTableBody.innerHTML = '';
-
-                // Check if data is available
-                if (data) {
-                    // Create a new row
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.playerName || 'Unknown'}</td>
-                        <td>${data.mass || 'N/A'}</td>
-                        <td>${new Date(data.timestamp).toLocaleString() || 'N/A'}</td>
-                    `;
-                    // Append the new row to the table body
-                    massTableBody.appendChild(row);
-                } else {
-                    console.error('No data found for this player.');
-                }
+                // Write the table HTML to the new window
+                newWindow.document.write(tableHTML);
+                newWindow.document.close(); // Close the document to complete writing
             } else {
-                console.error('Table elements not found.');
+                console.error('Failed to open new window.');
             }
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
 });
+
 
 var btn = document.getElementById('startButton');
 var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
