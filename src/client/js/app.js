@@ -455,9 +455,6 @@ $("#split").click(function () {
 
 function handleDisconnect() {
     socket.close();
-    const currentMass = player.massTotal || 0;
-    const massGained = currentMass - (initialMass || 0);
-    console.log(`Mass gained during the game: ${massGained}`);
 
     if (!global.kicked) { // We have a more specific error message 
         render.drawErrorMessage('Disconnected!', graph, global.screen);
@@ -548,25 +545,30 @@ socket.on('playerJoin', (data) => {
         window.chat.addChatLine(data.sender, data.message, false);
     });
 
-    // Handle movement.
     socket.on('serverTellPlayerMove', function (playerData, userData, foodsList, massList, virusList) {
         if (global.playerType == 'player') {
+            // Check if player gained mass
             if (playerData.massTotal > player.massTotal) {
                 isAnimating = true;
                 animationStartTime = Date.now();
-    
-                // Check for significant mass gain
-                const massGained = playerData.massTotal - player.massTotal;
-                if (massGained >= 10) {  // Adjust this threshold as needed
-                    const userId = global.playerId || 'unknown';
-                    storeMassData(massGained, global.playerName, userId);
-                }
             }
     
+            // Update player data
             player.x = playerData.x;
             player.y = playerData.y;
             player.hue = playerData.hue;
+            
+            // Update player's mass
+            const previousMass = player.massTotal || 0;
             player.massTotal = playerData.massTotal;
+    
+            // Calculate the mass difference and store the updated mass in Firebase
+            const massGained = player.massTotal - previousMass;
+            if (massGained > 0) {
+                const userId = global.playerId || 'unknown';
+                storeMassData(massGained, global.playerName, userId);
+            }
+    
             player.cells = playerData.cells;
         }
         users = userData;
@@ -579,9 +581,6 @@ socket.on('playerJoin', (data) => {
     // Death.
     socket.on('RIP', function () {
         global.gameStart = false;
-        const currentMass = player.massTotal || 0;
-        const massGained = currentMass - (initialMass || 0);
-        console.log(`Mass gained during the game: ${massGained}`);
 
         render.drawErrorMessage('You died!', graph, global.screen);
         window.setTimeout(() => {
@@ -597,9 +596,6 @@ socket.on('playerJoin', (data) => {
     socket.on('kick', function (reason) {
         global.gameStart = false;
         global.kicked = true;
-        const currentMass = player.massTotal || 0;
-        const massGained = currentMass - (initialMass || 0);
-        console.log(`Mass gained during the game: ${massGained}`);
 
         if (reason !== '') {
             render.drawErrorMessage('You were kicked for: ' + reason, graph, global.screen);
