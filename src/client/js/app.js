@@ -120,16 +120,10 @@ var firebaseConfig = {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   
-  // Get a reference to the database service
-  var database = firebase.database();
-
-  function storeMassData(massGained, playerName, playerId) {
-    // Create a reference to the player's document using their ID
+  function storeMassData(massChange, playerName, playerId) {
     const playerRef = firebase.database().ref(`players/${playerId}`);
-  
-    // Update the player's mass data
     playerRef.update({
-      massGained: massGained,
+      mass: firebase.database.ServerValue.increment(massChange), // Update total mass
       playerName: playerName,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     })
@@ -139,17 +133,8 @@ var firebaseConfig = {
     .catch((error) => {
       console.error(`Error updating mass data for player ${playerId}:`, error);
     });
-  
-
-    // Push the mass data to Firebase
-    database.ref('massGainedData').push(massData)
-        .then(() => {
-            console.log("Mass data successfully stored in Firebase");
-        })
-        .catch((error) => {
-            console.error("Error storing mass data in Firebase: ", error);
-        });
 }
+  
 
 var btn = document.getElementById('startButton');
 var nickErrorText = document.querySelector('#startMenu .input-error'); // Make sure this is not commented out
