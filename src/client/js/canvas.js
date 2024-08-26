@@ -42,27 +42,32 @@ class Canvas {
         // Invert the y-axis
         let x = vector.x;
         let y = -vector.y;
-
+    
         // Normalize the distance to a value between 0 and 1
-        const maxDistance = this.joystick.options.size / 2; // Half the joystick size is the maximum distance
-        let normalizedDistance = Math.min(distance / maxDistance, 1); // Ensure it stays within [0, 1]
-
-        // Define speedFactor based on distance ranges
-        let speedFactor;
-        if (normalizedDistance < 0.67) {
-            // First two-thirds: apply a quadratic function for a gradual increase
-            speedFactor = Math.pow(normalizedDistance / 0.67, 2) * 0.5;
-        } else {
-            // Last third: use a linear function that ramps up quickly
-            speedFactor = 0.5 + ((normalizedDistance - 0.67) / 0.33) * 0.5;
+        const maxDistance = this.joystick.options.size / 2;
+        let normalizedDistance = Math.min(distance / maxDistance, 1);
+    
+        // Add a dead zone
+        const deadZone = 0.1;
+        if (normalizedDistance < deadZone) {
+            this.target = { x: 0, y: 0 };
+            global.target = this.target;
+            this.socket.emit('0', this.target);
+            return;
         }
-
+    
+        // Adjust the curve for more precise control
+        let speedFactor = Math.pow((normalizedDistance - deadZone) / (1 - deadZone), 3);
+    
+        // Scale down the maximum speed
+        const maxSpeed = 1 * Number.MAX_VALUE;
+    
         // Adjust target coordinates based on the speed factor
         this.target = {
-            x: x * speedFactor * Number.MAX_VALUE,
-            y: y * speedFactor * Number.MAX_VALUE
+            x: x * speedFactor * maxSpeed,
+            y: y * speedFactor * maxSpeed
         };
-
+    
         global.target = this.target;
         this.socket.emit('0', this.target);
     }
