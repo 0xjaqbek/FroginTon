@@ -48,7 +48,7 @@ class Canvas {
         let normalizedDistance = Math.min(distance / maxDistance, 1);
     
         // Add a dead zone
-        const deadZone = 0.1;
+        const deadZone = 0.18;
         if (normalizedDistance < deadZone) {
             this.target = { x: 0, y: 0 };
             global.target = this.target;
