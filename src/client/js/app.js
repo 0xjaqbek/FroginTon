@@ -147,45 +147,49 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
     const playersRef = firebase.database().ref('players');
 
     playersRef.once('value')
-        .then((snapshot) => {
-            const playersData = snapshot.val();
-            console.log('All players data retrieved:', playersData);
+    .then((snapshot) => {
+        const playersData = snapshot.val();
+        console.log('All players data retrieved:', playersData);
 
-            const container = document.getElementById('playersDataContainer');
-            container.innerHTML = ''; // Clear existing content
+        const container = document.getElementById('playersDataContainer');
+        container.innerHTML = ''; // Clear existing content
 
-            let tableHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Player ID</th>
-                            <th>Player Name</th>
-                            <th>Mass</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+        // Convert playersData to an array and sort by mass in descending order
+        const sortedPlayers = Object.keys(playersData)
+            .map(playerId => ({ playerId, ...playersData[playerId] }))
+            .sort((a, b) => (b.mass || 0) - (a.mass || 0));
 
-            for (let playerId in playersData) {
-                const player = playersData[playerId];
-                tableHTML += `
+        let tableHTML = `
+            <table>
+                <thead>
                     <tr>
-                        <td>${playerId}</td>
-                        <td>${player.playerName || 'Unknown'}</td>
-                        <td>${player.mass || 'N/A'}</td>
-                        <td>${player.timestamp ? new Date(player.timestamp).toLocaleString() : 'N/A'}</td>
-                    </tr>`;
-            }
+                        <th>Player ID</th>
+                        <th>Player Name</th>
+                        <th>Mass</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>`;
 
+        sortedPlayers.forEach(player => {
             tableHTML += `
-                    </tbody>
-                </table>`;
-
-            container.innerHTML = tableHTML; // Insert the table HTML into the container
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
+                <tr>
+                    <td>${player.playerId}</td>
+                    <td>${player.playerName || 'Unknown'}</td>
+                    <td>${player.mass || 'N/A'}</td>
+                    <td>${player.timestamp ? new Date(player.timestamp).toLocaleString() : 'N/A'}</td>
+                </tr>`;
         });
+
+        tableHTML += `
+                </tbody>
+            </table>`;
+
+        container.innerHTML = tableHTML; // Insert the table HTML into the container
+    })
+    .catch((error) => {
+        console.error('Error fetching data:', error);
+    });
 });
 
 // Hide the modal when clicking the close button
