@@ -163,8 +163,7 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
             <table>
                 <thead>
                     <tr>
-                        <th>Player ID</th>
-                        <th>Player Name</th>
+                        <th>Player</th>
                         <th>Mass</th>
                         <th>Timestamp</th>
                     </tr>
@@ -174,7 +173,6 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
         sortedPlayers.forEach(player => {
             tableHTML += `
                 <tr>
-                    <td>${player.playerId}</td>
                     <td>${player.playerName || 'Unknown'}</td>
                     <td>${player.mass || 'N/A'}</td>
                     <td>${player.timestamp ? new Date(player.timestamp).toLocaleString() : 'N/A'}</td>
