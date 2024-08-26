@@ -235,7 +235,7 @@ const drawGrid = (global, player, screen, graph) => {
 
 
 const drawBorder = (borders, graph) => {
-    graph.lineWidth = 1;
+    graph.lineWidth = 10;
     graph.strokeStyle = '#000000'
     graph.beginPath()
     graph.moveTo(borders.left, borders.top);

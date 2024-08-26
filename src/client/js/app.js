@@ -18,10 +18,6 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
     global.mobile = true;
 }
 
-
-
-
-
 function startGame(type) {
     global.playerName = global.playerName || playerNameInput.value.replace(/(<([^>]+)>)/ig, '').substring(0, 25);
     global.playerType = type;
@@ -358,7 +354,7 @@ function drawOtherUserImage(position, graph, cell) {
     );
 
     // Draw the mass next to the other player's cell
-    graph.font = '12px Arial';
+    graph.font = '${Math.max(cell.radius / 3, 12)} Arial';
     graph.fillStyle = '#FFFFFF';
     graph.textAlign = 'center';
     graph.textBaseline = 'middle';
@@ -674,7 +670,7 @@ function gameLoop() {
         var cellsToDraw = [];
         users.forEach(user => {
             let color = 'hsl(' + user.hue + ', 100%, 50%, 0.01)';
-            let borderColor = 'hsl(' + user.hue + ', 100%, 45%, 0.1)';
+            let borderColor = 'hsl(' + user.hue + ', 100%, 45%, 0.01)';
         
             user.cells.forEach(cell => {
                 let position = {
