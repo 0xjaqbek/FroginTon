@@ -168,51 +168,7 @@ arenaImage.onerror = function() {
 };
 
 const drawGrid = (global, player, screen, graph) => {
-    // Draw the arena image as the background
-    if (arenaImage.complete && arenaImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
-
-        let arenaImageWidth;
-        let arenaImageHeight;
-
-        if (screen.width <= screen.height) {
-            // On mobile devices (screen width <= screen height), fit the image to screen width
-            arenaImageWidth = screen.width;
-            arenaImageHeight = arenaImageWidth / arenaImage.naturalWidth * arenaImage.naturalHeight;
-        } else {
-            // On larger screens (screen width > screen height), fit the image to screen height
-            arenaImageHeight = screen.height;
-            arenaImageWidth = arenaImageHeight / arenaImage.naturalHeight * arenaImage.naturalWidth;
-        }
-
-        graph.drawImage(
-            arenaImage,
-            (screen.width - arenaImageWidth) / 2, // Center horizontally
-            (screen.height - arenaImageHeight) / 2, // Center vertically
-            arenaImageWidth,
-            arenaImageHeight
-        );
-    } else {
-        console.warn('Arena image not yet loaded or has invalid dimensions');
-    }
-
-    // Draw the sponsor image at the top of the screen
-    if (sponsorImage.complete && sponsorImage.naturalWidth > 0) {  // Check if the image is loaded and has valid dimensions
-
-        const sponsorImageWidth = screen.width; // Scale width to 50% of screen width
-        const sponsorImageHeight = sponsorImageWidth / sponsorImage.naturalWidth * sponsorImage.naturalHeight; // Maintain aspect ratio
-
-        graph.drawImage(
-            sponsorImage,
-            (screen.width - sponsorImageWidth) / 2, // Center horizontally
-            10, // Top margin of 10 pixels
-            sponsorImageWidth,
-            sponsorImageHeight
-        );
-    } else {
-        console.warn('Sponsor image not yet loaded or has invalid dimensions');
-    }
-
-    // Draw the grid
+    // Draw the grid lines first
     graph.lineWidth = 1;
     graph.strokeStyle = global.lineColor;
     graph.globalAlpha = 0.15;
@@ -230,6 +186,51 @@ const drawGrid = (global, player, screen, graph) => {
 
     graph.stroke();
     graph.globalAlpha = 1;
+
+    // Draw the arena images in a 3x3 grid
+    if (arenaImage.complete && arenaImage.naturalWidth > 0) {
+        const gameWidth = global.game.width;
+        const gameHeight = global.game.height;
+        const gridSize = 3;
+        
+        // Use the smaller dimension to ensure square images
+        const imageSize = Math.min(gameWidth, gameHeight) / gridSize;
+        
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                // Calculate position for each image
+                const imageX = col * imageSize;
+                const imageY = row * imageSize;
+
+                // Draw the image at its fixed position in the game world
+                graph.drawImage(
+                    arenaImage,
+                    imageX - player.x,
+                    imageY - player.y,
+                    imageSize,
+                    imageSize
+                );
+            }
+        }
+    } else {
+        console.warn('Arena image not yet loaded or has invalid dimensions');
+    }
+
+    // Draw the sponsor image at the top of the screen (keeping this part unchanged)
+    if (sponsorImage.complete && sponsorImage.naturalWidth > 0) {
+        const sponsorImageWidth = screen.width;
+        const sponsorImageHeight = sponsorImageWidth / sponsorImage.naturalWidth * sponsorImage.naturalHeight;
+
+        graph.drawImage(
+            sponsorImage,
+            (screen.width - sponsorImageWidth) / 2,
+            10,
+            sponsorImageWidth,
+            sponsorImageHeight
+        );
+    } else {
+        console.warn('Sponsor image not yet loaded or has invalid dimensions');
+    }
 };
 
 
