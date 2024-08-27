@@ -187,34 +187,40 @@ const drawGrid = (global, player, screen, graph) => {
     graph.stroke();
     graph.globalAlpha = 1;
 
-    // Draw the arena images in a 3x3 grid
-    if (arenaImage.complete && arenaImage.naturalWidth > 0) {
-        const gameWidth = global.game.width;
-        const gameHeight = global.game.height;
-        const gridSize = 3;
-        
-        // Use the smaller dimension to ensure square images
-        const imageSize = Math.min(gameWidth, gameHeight) / gridSize;
-        
-        for (let row = 0; row < gridSize; row++) {
-            for (let col = 0; col < gridSize; col++) {
-                // Calculate position for each image
-                const imageX = col * imageSize;
-                const imageY = row * imageSize;
+// Draw the arena images in a 3x3 grid
+if (arenaImage.complete && arenaImage.naturalWidth > 0) {
+    const gameWidth = global.game.width;
+    const gameHeight = global.game.height;
+    const gridSize = 3;
+    
+    // Use the smaller dimension to ensure square images
+    const originalImageSize = Math.min(gameWidth, gameHeight) / gridSize;
+    
+    // Reduce image size by 25%
+    const imageSize = originalImageSize * 0.6;
+    
+    // Calculate offset to center the smaller images in their grid cells
+    const offset = (originalImageSize - imageSize) / 2;
 
-                // Draw the image at its fixed position in the game world
-                graph.drawImage(
-                    arenaImage,
-                    imageX - player.x,
-                    imageY - player.y,
-                    imageSize,
-                    imageSize
-                );
-            }
+    for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+            // Calculate position for each image, adjusted by the offset
+            const imageX = col * originalImageSize + offset + 200;
+            const imageY = row * originalImageSize + offset;
+
+            // Draw the image at its fixed position in the game world
+            graph.drawImage(
+                arenaImage,
+                imageX - player.x,
+                imageY - player.y,
+                imageSize,
+                imageSize
+            );
         }
-    } else {
-        console.warn('Arena image not yet loaded or has invalid dimensions');
     }
+} else {
+    console.warn('Arena image not yet loaded or has invalid dimensions');
+}
 
     // Draw the sponsor image at the top of the screen (keeping this part unchanged)
     if (sponsorImage.complete && sponsorImage.naturalWidth > 0) {
