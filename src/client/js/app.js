@@ -55,11 +55,11 @@ window.onload = function () {
 
     if (isTelegramWebApp) {
         console.log("Running in Telegram Web App");
-        Telegram.WebApp.expand();
-        Telegram.WebApp.disableVerticalSwipes();
-        
+        window.Telegram.WebApp.disableVerticalSwipes();
+        window.Telegram.WebApp.expand(true);
+        Telegram.WebApp.ready();
         Telegram.WebApp.setHeaderColor('bg_color');
-        console.log("Header color set");
+        console.log("Header color", Telegram.WebApp.setHeaderColor);
         
         // Debug: Check the entire initDataUnsafe object
         console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
@@ -72,16 +72,16 @@ window.onload = function () {
 
         if (user) {
             var username = user.username || "Unnamed";
-            var userId = user.id || "No ID";
+            var userId = user.id || "No ID";  // Obtain the Telegram user ID
 
             console.log("Username: " + username);
             console.log("User ID: " + userId);
 
             // Set the player name to the obtained Telegram username
             global.playerName = username;
-            global.playerId = userId;
-            console.log("Player name set to: " + window.playerName);
-            console.log("Player ID set to: " + window.playerId);
+            global.playerId = userId;  // Optionally, store the user ID
+            console.log("Player name set to: " + global.playerName);
+            console.log("Player ID set to: " + global.playerId);
 
             // Remove the playerNameInput field from the DOM
             var playerNameInput = document.getElementById('playerNameInput');
@@ -90,22 +90,12 @@ window.onload = function () {
                 console.log("playerNameInput field removed.");
             }
 
-            // Set up the main button
-            var mainButton = Telegram.WebApp.MainButton;
-            mainButton.setText("Join Game Chat");
-            mainButton.onClick(function() {
-                // Replace 'your_chat_link' with the actual deep link to your game chat
-                var chatLink = 'https://t.me/your_chat_link';
-                Telegram.WebApp.openTelegramLink(chatLink);
-            });
-            mainButton.show();
+            // Optionally, start the game automatically
+            // startGame("default");  // Uncomment this line if you want the game to start automatically
 
         } else {
             console.log("No user data available.");
         }
-
-        // Tell Telegram that your app is ready
-        Telegram.WebApp.ready();
     } else {
         console.log("Not running in Telegram Web App");
     }
@@ -640,7 +630,6 @@ function animloop() {
 
 function gameLoop() {
     if (global.gameStart) {
-        mainButton.hide();
         // Clear the canvas and redraw the background
         graph.fillStyle = global.backgroundColor;
         graph.fillRect(0, 0, global.screen.width, global.screen.height);
