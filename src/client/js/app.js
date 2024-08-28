@@ -90,22 +90,21 @@ window.onload = function () {
                 console.log("playerNameInput field removed.");
             }
 
-            // Optionally, start the game automatically
-            // startGame("default");  // Uncomment this line if you want the game to start automatically
+            // Set up the main button
+            var mainButton = Telegram.WebApp.MainButton;
+            mainButton.setText("Join Game Chat");
+            mainButton.onClick(function() {
+                // Replace 'your_chat_link' with the actual deep link to your game chat
+                var chatLink = 'https://t.me/your_chat_link';
+                Telegram.WebApp.openTelegramLink(chatLink);
+            });
+            mainButton.show();
 
         } else {
             console.log("No user data available.");
         }
 
-        // Add event listener for the game chat button
-        document.getElementById('gameChatButton').addEventListener('click', function() {
-            // Replace 'your_chat_link' with the actual deep link to your game chat
-            var chatLink = 'https://t.me/your_chat_link';
-            
-            // Open the chat link
-            Telegram.WebApp.openTelegramLink(chatLink);
-        });
-
+        // Tell Telegram that your app is ready
         Telegram.WebApp.ready();
     } else {
         console.log("Not running in Telegram Web App");
