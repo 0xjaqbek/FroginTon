@@ -55,8 +55,8 @@ window.onload = function () {
 
     if (isTelegramWebApp) {
         console.log("Running in Telegram Web App");
-        window.Telegram.WebApp.isExpanded(true);
-        window.Telegram.WebApp.disableVerticalSwipes();
+        Telegram.WebApp.expand(true);
+        Telegram.WebApp.disableVerticalSwipes();
         
         Telegram.WebApp.ready();
         Telegram.WebApp.setHeaderColor('bg_color');
