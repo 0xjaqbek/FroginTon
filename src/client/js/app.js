@@ -51,8 +51,8 @@ function validNick() {
 // New function to create and show the game chat button
 function showGameChatButton() {
     if (typeof Telegram !== 'undefined' && Telegram.WebApp && Telegram.WebApp.MainButton) {
-        Telegram.WebApp.inlineKeyboard.setText("Join Game Chat");
-        Telegram.WebApp.inlineKeyboard.onClick(function() {
+        Telegram.WebApp.MainButton.setText("Join Game Chat");
+        Telegram.WebApp.MainButton.onClick(function() {
             // Replace 'your_chat_link' with the actual deep link to your game chat
             var chatLink = 'https://t.me/your_chat_link';
             Telegram.WebApp.openTelegramLink(chatLink);
