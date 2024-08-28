@@ -78,8 +78,8 @@ window.onload = function () {
             console.log("User ID: " + userId);
 
             // Set the player name to the obtained Telegram username
-            window.playerName = username;
-            window.playerId = userId;
+            global.playerName = username;
+            global.playerId = userId;
             console.log("Player name set to: " + window.playerName);
             console.log("Player ID set to: " + window.playerId);
 
@@ -640,6 +640,7 @@ function animloop() {
 
 function gameLoop() {
     if (global.gameStart) {
+        mainButton.hide();
         // Clear the canvas and redraw the background
         graph.fillStyle = global.backgroundColor;
         graph.fillRect(0, 0, global.screen.width, global.screen.height);
