@@ -48,6 +48,19 @@ function validNick() {
     return regex.exec(playerNameInput.value) !== null;
 }
 
+// New function to create and show the game chat button
+function showGameChatButton() {
+    if (typeof Telegram !== 'undefined' && Telegram.WebApp && Telegram.WebApp.MainButton) {
+        Telegram.WebApp.MainButton.setText("Join Game Chat");
+        Telegram.WebApp.MainButton.onClick(function() {
+            // Replace 'your_chat_link' with the actual deep link to your game chat
+            var chatLink = 'https://t.me/your_chat_link';
+            Telegram.WebApp.openTelegramLink(chatLink);
+        });
+        Telegram.WebApp.MainButton.show();
+    }
+}
+
 window.onload = function () {
     console.log("Script loaded and running");
 
@@ -89,6 +102,9 @@ window.onload = function () {
                 playerNameInput.remove();
                 console.log("playerNameInput field removed.");
             }
+
+            // Show the game chat button
+            showGameChatButton();
 
             // Optionally, start the game automatically
             // startGame("default");  // Uncomment this line if you want the game to start automatically
