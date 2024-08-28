@@ -55,12 +55,11 @@ window.onload = function () {
 
     if (isTelegramWebApp) {
         console.log("Running in Telegram Web App");
-        Telegram.WebApp.expand(true);
+        Telegram.WebApp.expand();
         Telegram.WebApp.disableVerticalSwipes();
         
-        Telegram.WebApp.ready();
         Telegram.WebApp.setHeaderColor('bg_color');
-        console.log("Header color", Telegram.WebApp.setHeaderColor);
+        console.log("Header color set");
         
         // Debug: Check the entire initDataUnsafe object
         console.log("Telegram WebApp initDataUnsafe:", Telegram.WebApp.initDataUnsafe);
@@ -73,16 +72,16 @@ window.onload = function () {
 
         if (user) {
             var username = user.username || "Unnamed";
-            var userId = user.id || "No ID";  // Obtain the Telegram user ID
+            var userId = user.id || "No ID";
 
             console.log("Username: " + username);
             console.log("User ID: " + userId);
 
             // Set the player name to the obtained Telegram username
-            global.playerName = username;
-            global.playerId = userId;  // Optionally, store the user ID
-            console.log("Player name set to: " + global.playerName);
-            console.log("Player ID set to: " + global.playerId);
+            window.playerName = username;
+            window.playerId = userId;
+            console.log("Player name set to: " + window.playerName);
+            console.log("Player ID set to: " + window.playerId);
 
             // Remove the playerNameInput field from the DOM
             var playerNameInput = document.getElementById('playerNameInput');
@@ -97,6 +96,17 @@ window.onload = function () {
         } else {
             console.log("No user data available.");
         }
+
+        // Add event listener for the game chat button
+        document.getElementById('gameChatButton').addEventListener('click', function() {
+            // Replace 'your_chat_link' with the actual deep link to your game chat
+            var chatLink = 'https://t.me/your_chat_link';
+            
+            // Open the chat link
+            Telegram.WebApp.openTelegramLink(chatLink);
+        });
+
+        Telegram.WebApp.ready();
     } else {
         console.log("Not running in Telegram Web App");
     }
