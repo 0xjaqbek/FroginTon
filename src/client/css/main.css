@@ -17,6 +17,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Super Woobly';
+    src: url('../DigitaltsLime.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Example usage */
 body, input, button {
     font-family: 'Super Frog';
