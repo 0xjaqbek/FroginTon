@@ -152,13 +152,18 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
 
         // Convert playersData to an array and sort by mass in descending order
         const sortedPlayers = Object.keys(playersData)
-            .map(playerId => ({ playerId, ...playersData[playerId] }))
+            .map((playerId, index) => ({ 
+                playerId, 
+                ranking: index + 1, // Add ranking based on position in array
+                ...playersData[playerId] 
+            }))
             .sort((a, b) => (b.mass || 0) - (a.mass || 0));
 
         let tableHTML = `
             <table>
                 <thead>
                     <tr>
+                        <th>Rank</th>
                         <th>Player</th>
                         <th>Mass</th>
                         <th>Timestamp</th>
@@ -166,9 +171,10 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
                 </thead>
                 <tbody>`;
 
-        sortedPlayers.forEach(player => {
+        sortedPlayers.forEach((player, index) => {
             tableHTML += `
                 <tr>
+                    <td>${index + 1}</td> <!-- Ranking Number -->
                     <td>${player.playerName || 'Unknown'}</td>
                     <td>${player.mass || 'N/A'}</td>
                     <td>${player.timestamp ? new Date(player.timestamp).toLocaleString() : 'N/A'}</td>
@@ -185,6 +191,7 @@ document.getElementById('retrieveDataButton').addEventListener('click', () => {
         console.error('Error fetching data:', error);
     });
 });
+
 
 // Hide the modal when clicking the close button
 document.getElementById('closeModalButton').addEventListener('click', () => {
