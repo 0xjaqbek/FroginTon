@@ -343,12 +343,17 @@ div {
 
     #startButton {
         width: 100%; /* Adjust button width for smaller screens */
-        height: 35px; /* Adjust button height */
+        height: 45px; /* Adjust button height */
     }
+
+    #howToPlayButton {
+    width: 100%; /* Adjust button width for smaller screens */
+    height: 45px; /* Adjust button height */
+}
 
     #retrieveDataButton {
         width: 100%; /* Adjust button width for smaller screens */
-        height: 35px; /* Adjust button height */
+        height: 45px; /* Adjust button height */
     }
 
     #status {
