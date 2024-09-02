@@ -146,7 +146,7 @@ div {
 #startMenu {
     width: 350px;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.292);
     box-sizing: border-box;
     color: #000000;
