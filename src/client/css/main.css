@@ -147,7 +147,7 @@ div {
     width: 350px;
     padding: 10px;
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.114);
+    background-color: rgba(255, 255, 255, 0);
     box-sizing: border-box;
     color: #000000;
 }
