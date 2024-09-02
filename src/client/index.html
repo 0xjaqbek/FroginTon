@@ -51,22 +51,31 @@
             </a>
             <!-- Mass Button -->
             <a><button id="retrieveDataButton" style="margin-top: 5px;">Mass</button></a>
-<!-- Modal HTML -->
-<div id="playersModal" class="modal">
-    <div class="modal-content">
-        <span class="close-button" id="closeModalButton">&times;</span>
-        <h1>All Players Mass Data</h1>
-        <div id="playersDataContainer"></div>
-    </div>
-</div>
-            <div id="instructions">
-                <h3>Gameplay</h3>
-                <ul>
-                    <li>Move your joystick to move your character.</li>
-                    <li>Eat food and other players in order to grow your character (food respawns every time a player eats it).</li>
-                    <li>A player's mass is the number of food particles eaten.</li>
-                    <li>Objective: Try to get fat and eat other players.</li>
-                </ul>
+
+            <!-- How to Play Button -->
+            <a><button id="howToPlayButton" style="margin-top: 5px;">How to Play</button></a>
+            
+            <!-- Players Mass Modal -->
+            <div id="playersModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" id="closeModalButton">&times;</span>
+                    <h1>All Players Mass Data</h1>
+                    <div id="playersDataContainer"></div>
+                </div>
+            </div>
+
+            <!-- How to Play Modal -->
+            <div id="howToPlayModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" id="closeHowToPlayModalButton">&times;</span>
+                    <h1>How to Play</h1>
+                    <ul>
+                        <li>Move your joystick to move your character.</li>
+                        <li>Eat food and other players in order to grow your character (food respawns every time a player eats it).</li>
+                        <li>A player's mass is the number of food particles eaten.</li>
+                        <li>Objective: Try to get fat and eat other players.</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -76,5 +85,33 @@
     <!-- JS -->
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/app.js"></script>
+
+    <script>
+        // Open and close "Players Mass" modal
+        document.getElementById('retrieveDataButton').onclick = function() {
+            document.getElementById('playersModal').style.display = 'block';
+        };
+        document.getElementById('closeModalButton').onclick = function() {
+            document.getElementById('playersModal').style.display = 'none';
+        };
+
+        // Open and close "How to Play" modal
+        document.getElementById('howToPlayButton').onclick = function() {
+            document.getElementById('howToPlayModal').style.display = 'block';
+        };
+        document.getElementById('closeHowToPlayModalButton').onclick = function() {
+            document.getElementById('howToPlayModal').style.display = 'none';
+        };
+
+        // Close the modals when clicking outside of them
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('playersModal')) {
+                document.getElementById('playersModal').style.display = 'none';
+            }
+            if (event.target == document.getElementById('howToPlayModal')) {
+                document.getElementById('howToPlayModal').style.display = 'none';
+            }
+        };
+    </script>
 </body>
 </html>
