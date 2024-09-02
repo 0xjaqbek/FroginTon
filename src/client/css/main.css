@@ -147,7 +147,7 @@ div {
     width: 350px;
     padding: 10px;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.761);
+    background-color: rgba(255, 255, 255, 0.807);
     box-sizing: border-box;
     color: #000000;
 }
@@ -386,7 +386,7 @@ input[type="image"]:focus {
 
 /* Modal styles */
 .modal {
-    color: #ffffff;
+    color: #1c1c1c;
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -395,12 +395,13 @@ input[type="image"]:focus {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.222); /* Black w/ opacity */
+    background-color: rgb(255, 255, 255); /* Fallback color */
+    background-color: rgba(255, 255, 255, 0.504); /* Black w/ opacity */
+    align-content: center;
 }
 
 .modal-content {
-    background-color: #3a3a3ad4;
+    background-color: #ffffffee;
     margin: 10% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
